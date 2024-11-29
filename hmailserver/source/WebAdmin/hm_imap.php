@@ -19,11 +19,11 @@ if($action == "save")
 	$obSettings->IMAPIdleEnabled  = hmailGetVar("IMAPIdleEnabled",0);
 	$obSettings->IMAPACLEnabled  = hmailGetVar("IMAPACLEnabled",0);
     
-    $obSettings->IMAPSASLPlainEnabled  = hmailGetVar("IMAPSASLPlainEnabled",0);
-    $obSettings->IMAPSASLInitialResponseEnabled  = hmailGetVar("IMAPSASLInitialResponseEnabled",0);
-    $obSettings->IMAPMasterUser  = hmailGetVar("IMAPMasterUser","");
-   
-    $obSettings->IMAPHierarchyDelimiter = hmailGetVar("IMAPHierarchyDelimiter","");
+   $obSettings->IMAPSASLPlainEnabled  = hmailGetVar("IMAPSASLPlainEnabled",0);
+   $obSettings->IMAPSASLInitialResponseEnabled  = hmailGetVar("IMAPSASLInitialResponseEnabled",0);
+   $obSettings->IMAPMasterUser  = hmailGetVar("IMAPMasterUser","");
+
+   $obSettings->IMAPHierarchyDelimiter = hmailGetVar("IMAPHierarchyDelimiter","");
 }
 
 $welcomeimap = $obSettings->WelcomeIMAP;     

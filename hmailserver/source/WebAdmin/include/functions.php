@@ -150,7 +150,7 @@ function ErrorHandler( $errno, $errstr, $errfile )
    die;
 }
 
-function  PrintPropertyRow($caption, $value)
+function PrintPropertyRow($caption, $value)
 {
    global $obLanguage;
    $caption = $obLanguage->String($caption);
@@ -166,7 +166,7 @@ function  PrintPropertyRow($caption, $value)
     ";
 }
 
-function  PrintPropertyEditRow($name, $caption, $value, $length = 20, $checktype = "")
+function PrintPropertyEditRow($name, $caption, $value, $length = 20, $checktype = "")
 {
    global $obLanguage;
    $caption = $obLanguage->String($caption);
@@ -185,7 +185,7 @@ function  PrintPropertyEditRow($name, $caption, $value, $length = 20, $checktype
     ";
 }
 
-function  PrintPropertyAreaRow($name, $caption, $value, $rows = 5, $cols = 20)
+function PrintPropertyAreaRow($name, $caption, $value, $rows = 5, $cols = 20)
 {
    global $obLanguage;
    $caption = $obLanguage->String($caption);
@@ -205,7 +205,7 @@ function  PrintPropertyAreaRow($name, $caption, $value, $rows = 5, $cols = 20)
 }
 
 
-function  PrintPasswordEntry($name, $caption, $length = 20)
+function PrintPasswordEntry($name, $caption, $length = 20)
 {
    global $obLanguage;
    $caption = $obLanguage->String($caption);
@@ -222,18 +222,23 @@ function  PrintPasswordEntry($name, $caption, $length = 20)
 }
 
 
-function  PrintCheckboxRow($name, $caption, $checked)
+function PrintCheckboxRow($name, $caption, $checked, $disabled = false)
 {
    global $obLanguage;
    $caption = $obLanguage->String($caption);
    
    $checked_text = hmailCheckedIf1($checked);
    
+   $disabledstr = "";
+   if ($disabled){
+      $disabledstr = " disabled";
+   }
+   
    echo 
    "
    	<tr>
    		<td>$caption</td>
-   		<td><input type=\"checkbox\" name=\"$name\" value=\"1\" $checked_text></td>
+   		<td><input type=\"checkbox\"$disabledstr name=\"$name\" value=\"1\" $checked_text></td>
    	</tr>	
     ";
 }

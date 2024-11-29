@@ -45,9 +45,9 @@ if($action == "save")
 	$obSettings->AllowIncorrectLineEndings = hmailGetVar("AllowIncorrectLineEndings",0);
 	$obSettings->DisconnectInvalidClients = hmailGetVar("DisconnectInvalidClients",0);
 	$obSettings->MaxNumberOfInvalidCommands = hmailGetVar("MaxNumberOfInvalidCommands",0);
-	   
-    $obSettings->AddDeliveredToHeader = hmailGetVar("AddDeliveredToHeader",0);
 	
+	$obSettings->AddDeliveredToHeader = hmailGetVar("AddDeliveredToHeader",0);		
+
 	$obSettings->MaxNumberOfMXHosts = hmailGetVar("MaxNumberOfMXHosts", 15);
 	
 	// Advanced
@@ -87,7 +87,7 @@ $AddDeliveredToHeader = $obSettings->AddDeliveredToHeader;
 $AllowSMTPAuthPlainChecked = hmailCheckedIf1($AllowSMTPAuthPlain);
 $AllowMailFromNullChecked    = hmailCheckedIf1($AllowMailFromNull);
 $AllowIncorrectLineEndingsChecked = hmailCheckedIf1($AllowIncorrectLineEndings);
-$DisconnectInvalidClientsChecked = hmailCheckedIf1($DisconnectInvalidClients );
+$DisconnectInvalidClientsChecked = hmailCheckedIf1($DisconnectInvalidClients);
 
 $MaxNumberOfMXHosts = $obSettings->MaxNumberOfMXHosts;
 
