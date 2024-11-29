@@ -264,6 +264,17 @@ namespace HM
       }
       else
       {
+         //check if start is not over buffer
+         if (iOctetStart > iBufferSize)
+         {
+            ////reset to start?
+            //iOctetStart = 0;
+
+            //alt
+            iOctetStart = iBufferSize;
+            iOctetCount = 0;
+         }
+
          // Jump forward to the start of the buffer.
          iBufferSize -= iOctetStart;
 
@@ -283,12 +294,13 @@ namespace HM
    }
 
    std::shared_ptr<MimeBody> 
-   IMAPFetch::GetBodyPartByRecursiveIdentifier_(std::shared_ptr<MimeBody> pBody, const String &sName)
+   IMAPFetch::GetBodyPartByRecursiveIdentifier_(std::shared_ptr<MimeBody> pBody, IMAPFetchParser::BodyPart &oPart)
    //---------------------------------------------------------------------------()
    // DESCRIPTION:
    // Returns a body part by a given identifier. An identifier can be 1, 2, 1.2 etc.
    //---------------------------------------------------------------------------()
    {
+      String sName = oPart.GetName();
       if (!pBody || sName.IsEmpty())
       {
          std::shared_ptr<MimeBody> pEmpty;
@@ -320,7 +332,8 @@ namespace HM
                return pBody;
             }
 
-            if (pBody->IsEncapsulatedRFC822Message())
+            //load encapsulated RFC message only if we are not requesting MIME
+            if (pBody->IsEncapsulatedRFC822Message() && !oPart.GetShowMime())
             {
                try
                {
@@ -366,7 +379,7 @@ namespace HM
       if (!oPart.GetName().IsEmpty())
       {
          String sMimePart;
-         pBodyPart  = GetBodyPartByRecursiveIdentifier_(pBodyPart, oPart.GetName());
+         pBodyPart = GetBodyPartByRecursiveIdentifier_(pBodyPart, oPart);
 
          if (!pBodyPart)
             return pOutBuf;
@@ -398,9 +411,9 @@ namespace HM
 
          GetBytesToSend_(body.GetLength(), oPart, iByteStart, iByteCount);
 
-	 // Fix for Apple Mail BODY PEEK with start + size issue
-	 // Start was being ignored before as it was never used
-	 // Changed to mimic 4.4.4 method since iByteStart is set in GetBytesToSend_
+         // Fix for Apple Mail BODY PEEK with start + size issue
+         // Start was being ignored before as it was never used
+         // Changed to mimic 4.4.4 method since iByteStart is set in GetBytesToSend_
          pOutBuf->Add((BYTE*) body.GetBuffer() + iByteStart, iByteCount);
       }
       else if (oPart.GetShowBodyFull())
@@ -418,10 +431,14 @@ namespace HM
          int iSize = FileUtilities::FileSize(messageFileName);
          GetBytesToSend_(iSize, oPart, iByteStart, iByteCount);
 
-         BYTE *pBuf = new BYTE[iByteCount];
-         FileUtilities::ReadFileToBuf(messageFileName, pBuf, iByteStart, iByteCount);
-         pOutBuf->Add(pBuf, iByteCount);
-         delete [] pBuf;
+         //read message, but only if we need any data request
+         if (iByteCount > 0)
+         {
+            BYTE* pBuf = new BYTE[iByteCount];
+            FileUtilities::ReadFileToBuf(messageFileName, pBuf, iByteStart, iByteCount);
+            pOutBuf->Add(pBuf, iByteCount);
+            delete[] pBuf;
+         }
       }
       else if (oPart.GetShowBodyHeaderFields())
       {
@@ -774,19 +791,19 @@ namespace HM
          }
 
          // Add subtype stamp.
-			String sType = oPart->GetSubType();
-			sType.ToUpper();
+         String sType = oPart->GetSubType();
+         sType.ToUpper();
 
-			String sTemp;
+         String sTemp;
          sTemp.Format(_T(" \"%s\""), sType.c_str());
-			sResult += sTemp;
+         sResult += sTemp;
 
-			if (includeExtensionData)
-			{
-				String sBoundary = oPart->GetBoundary();
+         if (includeExtensionData)
+         {
+            String sBoundary = oPart->GetBoundary();
             sTemp.Format(_T(" (\"BOUNDARY\" \"%s\") NIL NIL"), sBoundary.c_str());
-				sResult += sTemp;
-			}
+            sResult += sTemp;
+         }
          
          sResult += ")";
 
@@ -813,9 +830,9 @@ namespace HM
          sBodyParams.Format(_T("(\"NAME\" \"%s\")"), oPart->GetRawFilename().c_str());
       else
       {
-			String sCharset = oPart->GetCharset();
-			
-			if (sCharset.IsEmpty())
+         String sCharset = oPart->GetCharset();
+         
+         if (sCharset.IsEmpty())
          {
             // Fallback to default. One could think that the client
             // should assume this if we don't tell it, but at least

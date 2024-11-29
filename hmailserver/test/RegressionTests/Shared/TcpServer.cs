@@ -1,15 +1,15 @@
 // Copyright (c) 2010 Martin Knafve / hMailServer.com.  
 // http://www.hmailserver.com
 
+using hMailServer;
+using NUnit.Framework;
+using RegressionTests.Infrastructure;
 using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading;
-using hMailServer;
-using NUnit.Framework;
-using RegressionTests.Infrastructure;
 
 namespace RegressionTests.Shared
 {
@@ -57,7 +57,7 @@ namespace RegressionTests.Shared
          Console.WriteLine("Starting listen...");
 
          _listenThreadStarted.Reset();
-                 
+
 
          _serverThread = new Thread(StartListenWorker);
          _serverThread.Name = "Listen thread";
@@ -78,9 +78,9 @@ namespace RegressionTests.Shared
             var local = IPAddress.Parse("0.0.0.0");
 
             _tcpListener = new TcpListener(local, _port)
-               {
-                  ExclusiveAddressUse = false
-               };
+            {
+               ExclusiveAddressUse = false
+            };
 
             _tcpListener.Start();
 
@@ -163,14 +163,14 @@ namespace RegressionTests.Shared
          {
             _tcpConnection.Dispose();
             _tcpConnection = null;
-         }   
+         }
       }
 
       protected virtual void HandleClient()
       {
 
       }
-      
+
       public void WaitForCompletion()
       {
          if (_workerThreadException != null)
@@ -220,7 +220,7 @@ namespace RegressionTests.Shared
          _conversation += s;
          _tcpConnection.Send(s);
       }
-      
+
       public string Receive()
       {
          string data = _tcpConnection.Receive();
@@ -237,7 +237,7 @@ namespace RegressionTests.Shared
 
       public string ReadUntil(List<string> possibleReplies)
       {
-         string data =_tcpConnection.ReadUntil(possibleReplies);
+         string data = _tcpConnection.ReadUntil(possibleReplies);
          _conversation += data;
          return data;
       }

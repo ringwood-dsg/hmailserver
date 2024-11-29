@@ -1,12 +1,11 @@
 // Copyright (c) 2010 Martin Knafve / hMailServer.com.  
 // http://www.hmailserver.com
 
-using System;
-using System.Windows.Forms;
-using System.Runtime.InteropServices;
-
 using hMailServer.Administrator.Utilities;
 using hMailServer.Shared;
+using System;
+using System.Runtime.InteropServices;
+using System.Windows.Forms;
 
 namespace hMailServer.Administrator
 {
@@ -30,7 +29,7 @@ namespace hMailServer.Administrator
 
       public void OnLeavePage()
       {
-          timerRefreshHitRate.Enabled = false;
+         timerRefreshHitRate.Enabled = false;
       }
 
       private void OnContentChanged()
@@ -142,7 +141,7 @@ namespace hMailServer.Administrator
          labelAccountHitRate.Text = cache.AccountHitRate.ToString();
          labelAliasHitRate.Text = cache.AliasHitRate.ToString();
          labelDistributionListHitRate.Text = cache.DistributionListHitRate.ToString();
-                   Marshal.ReleaseComObject(settings);
+         Marshal.ReleaseComObject(settings);
          Marshal.ReleaseComObject(cache);
       }
 
@@ -182,8 +181,8 @@ namespace hMailServer.Administrator
 
       private void buttonMessageIndexingClear_Click(object sender, EventArgs e)
       {
-         if (MessageBox.Show(Strings.Localize("Are you sure you want to clear the message index?"), 
-                             EnumStrings.hMailServerAdministrator, MessageBoxButtons.YesNo, 
+         if (MessageBox.Show(Strings.Localize("Are you sure you want to clear the message index?"),
+                             EnumStrings.hMailServerAdministrator, MessageBoxButtons.YesNo,
                              MessageBoxIcon.Question) == DialogResult.Yes)
          {
             hMailServer.Settings settings = APICreator.Application.Settings;

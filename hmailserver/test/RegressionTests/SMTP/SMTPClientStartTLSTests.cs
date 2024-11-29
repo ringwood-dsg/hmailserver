@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
-using hMailServer;
+﻿using hMailServer;
 using NUnit.Framework;
 using RegressionTests.Infrastructure;
 using RegressionTests.Shared;
+using System.Collections.Generic;
 
 namespace RegressionTests.SMTP
 {
@@ -98,7 +98,7 @@ namespace RegressionTests.SMTP
             // Send message to this route.
             var smtp = new SmtpClientSimulator();
             smtp.Send("test@test.com", "test@dummy-example.com", "Test", "Test message");
-               
+
 
             // Wait for the client to disconnect.
             server.WaitForCompletion();
@@ -141,7 +141,7 @@ namespace RegressionTests.SMTP
          }
       }
 
-      
+
 
       [Test]
       public void TestDelivertoServerNotSupportingEHLOOptionalConnectionSecurity()

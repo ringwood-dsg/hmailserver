@@ -1,12 +1,10 @@
 // Copyright (c) 2010 Martin Knafve / hMailServer.com.  
 // http://www.hmailserver.com
 
-using System;
-using System.Collections.Generic;
-using System.Text;
 using hMailServer.Administrator.Controls;
-using System.Windows.Forms;
 using hMailServer.Shared;
+using System;
+using System.Windows.Forms;
 
 namespace hMailServer.Administrator.Utilities
 {
@@ -53,10 +51,10 @@ namespace hMailServer.Administrator.Utilities
 
             if (c.GetType() == typeof(System.Windows.Forms.Panel))
             {
-                Panel panel = c as Panel;
+               Panel panel = c as Panel;
 
-                if (IterateControls(panel, action, ev))
-                    return true;
+               if (IterateControls(panel, action, ev))
+                  return true;
             }
 
             System.Type editorType = c.GetType();
@@ -84,7 +82,7 @@ namespace hMailServer.Administrator.Utilities
                }
                else if (action == Action.SubscribeToChange)
                {
-                  
+
                   if (editorType == typeof(ucText))
                   {
                      ucText edit = c as ucText;

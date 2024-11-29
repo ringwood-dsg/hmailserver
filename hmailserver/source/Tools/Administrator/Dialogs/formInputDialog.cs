@@ -1,9 +1,9 @@
 // Copyright (c) 2010 Martin Knafve / hMailServer.com.  
 // http://www.hmailserver.com
 
+using hMailServer.Shared;
 using System;
 using System.Windows.Forms;
-using hMailServer.Shared;
 namespace hMailServer.Administrator
 {
    public partial class formInputDialog : Form
@@ -58,7 +58,7 @@ namespace hMailServer.Administrator
 
       private void btnOK_Click(object sender, EventArgs e)
       {
-         
+
       }
 
       private void textValue_TextChanged(object sender, EventArgs e)
@@ -70,7 +70,7 @@ namespace hMailServer.Administrator
       {
          btnOK.Enabled = textValue.Text.Trim().Length > 0;
       }
-  
+
 
    }
 }

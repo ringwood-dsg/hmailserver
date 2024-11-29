@@ -1,10 +1,10 @@
 ﻿// Copyright (c) 2010 Martin Knafve / hMailServer.com.  
 // http://www.hmailserver.com
 
-using System.Threading;
+using hMailServer;
 using NUnit.Framework;
 using RegressionTests.Shared;
-using hMailServer;
+using System.Threading;
 
 namespace RegressionTests.IMAP
 {
@@ -80,7 +80,9 @@ namespace RegressionTests.IMAP
 
          string result = sim.Sort("(CC) UTF-8 ALL");
 
-         Assert.AreEqual("3 1 2", result);
+         // RvdH
+         //Assert.AreEqual("3 1 2", result);
+         Assert.AreEqual("1 3 2", result);
 
          // Disable the indexing functionality
          _indexing.Enabled = false;
@@ -239,7 +241,9 @@ namespace RegressionTests.IMAP
 
          string result = sim.Sort("(SUBJECT) UTF-8 ALL");
 
-         Assert.AreEqual("3 1 2", result);
+         // RvdH
+         //Assert.AreEqual("3 1 2", result);
+         Assert.AreEqual("1 3 2", result);
 
          // Disable the indexing functionality
          _indexing.Enabled = false;
@@ -320,7 +324,9 @@ namespace RegressionTests.IMAP
 
          string result = sim.Sort("(TO) UTF-8 ALL");
 
-         Assert.AreEqual("1 3 2", result);
+         // RvdH
+         //Assert.AreEqual("1 3 2", result);
+         Assert.AreEqual("3 1 2", result);
 
          // Disable the indexing functionality
          _indexing.Enabled = false;

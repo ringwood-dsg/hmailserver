@@ -1,8 +1,8 @@
-﻿using System;
-using System.IO;
-using hMailServer;
+﻿using hMailServer;
 using NUnit.Framework;
 using RegressionTests.Shared;
+using System;
+using System.IO;
 
 namespace RegressionTests.Infrastructure
 {
@@ -83,7 +83,7 @@ namespace RegressionTests.Infrastructure
          {
             Assert.IsTrue(conn1.Connect(25));
 
-            CustomAsserts.AssertSessionCount(eSessionType.eSTSMTP,countBefore+1);
+            CustomAsserts.AssertSessionCount(eSessionType.eSTSMTP, countBefore + 1);
          }
 
       }

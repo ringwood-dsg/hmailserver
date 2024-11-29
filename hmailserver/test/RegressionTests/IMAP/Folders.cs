@@ -1,9 +1,9 @@
 // Copyright (c) 2010 Martin Knafve / hMailServer.com.  
 // http://www.hmailserver.com
 
+using hMailServer;
 using NUnit.Framework;
 using RegressionTests.Shared;
-using hMailServer;
 
 namespace RegressionTests.IMAP
 {
@@ -489,7 +489,8 @@ namespace RegressionTests.IMAP
 
          string sWelcomeMessage = simulator.Connect();
          simulator.LogonWithLiteral(account.Address, "test");
-         simulator.Send("A01 CREATE A\r\n");
+         //simulator.Send("A01 CREATE A\r\n");
+         simulator.Send("A03 CREATE A");
          Assert.IsFalse(simulator.RenameFolder("A", "INBOX"));
          Assert.IsFalse(simulator.RenameFolder("INBOX", "B"));
 

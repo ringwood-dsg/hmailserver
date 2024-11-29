@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using hMailServer;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using RegressionTests.Shared;
 
 namespace RegressionTests.SMTP
@@ -69,7 +65,7 @@ namespace RegressionTests.SMTP
       {
          AssertInvalidRcptToCommand("RCPT TO: <>", "550 A valid address is required.");
       }
-      
+
       [Test]
       public void RcptToQuotedAddressWithSpaceShouldSucceed()
       {
@@ -178,7 +174,7 @@ namespace RegressionTests.SMTP
          smtpClientSimulator.Send("MAIL FROM: <test@test.com>\r\n");
          Assert.IsTrue(smtpClientSimulator.Receive().StartsWith("250"));
 
-         string result = smtpClientSimulator.SendAndReceive(command+ "\r\n");
+         string result = smtpClientSimulator.SendAndReceive(command + "\r\n");
 
          smtpClientSimulator.Disconnect();
 

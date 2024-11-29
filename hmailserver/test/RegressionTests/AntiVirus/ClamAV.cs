@@ -1,7 +1,7 @@
-﻿using NUnit.Framework;
+﻿using hMailServer;
+using NUnit.Framework;
 using RegressionTests.Infrastructure;
 using RegressionTests.Shared;
-using hMailServer;
 
 namespace RegressionTests.AntiVirus
 {
@@ -32,8 +32,9 @@ namespace RegressionTests.AntiVirus
 
          Account account1 = SingletonProvider<TestSetup>.Instance.AddAccount(_domain, "test@test.com", "test");
          SmtpClientSimulator.StaticSend(account1.Address, account1.Address, "Mail 1", "DummyBody");
+
          Pop3ClientSimulator.AssertMessageCount(account1.Address, "test", 1);
-         
+
          // +OK POP3, since we are connecting to POP3 port
          string defaultLog = LogHandler.ReadCurrentDefaultLog();
          Assert.IsTrue(defaultLog.Contains("No virus detected: +OK POP3"));

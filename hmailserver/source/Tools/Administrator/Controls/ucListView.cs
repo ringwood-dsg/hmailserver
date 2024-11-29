@@ -1,11 +1,11 @@
 // Copyright (c) 2010 Martin Knafve / hMailServer.com.  
 // http://www.hmailserver.com
 
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Windows.Forms;
-using Microsoft.Win32;
 
 namespace hMailServer.Administrator
 {
@@ -17,7 +17,7 @@ namespace hMailServer.Administrator
 
       public delegate void BeforeSelectedIndexChangedHandler();
       public event BeforeSelectedIndexChangedHandler BeforeSelectedIndexChanged;
-      
+
       List<int> _numericSortOrders = new List<int>();
       private bool _numericalColumnsLoaded = false;
 
@@ -48,7 +48,7 @@ namespace hMailServer.Administrator
                _numericSortOrders.Add(column.Index);
          }
       }
-      
+
       private void LoadDateTimeColumns()
       {
          foreach (ColumnHeader column in Columns)
@@ -117,7 +117,7 @@ namespace hMailServer.Administrator
          }
       }
 
-      protected override void  OnColumnClick(ColumnClickEventArgs e)
+      protected override void OnColumnClick(ColumnClickEventArgs e)
       {
          if (!_numericalColumnsLoaded)
          {
@@ -169,7 +169,7 @@ namespace hMailServer.Administrator
          // Perform the sort with these new sort options.
          this.Sort();
 
- 	      base.OnColumnClick(e);
+         base.OnColumnClick(e);
       }
 
       /// <summary>

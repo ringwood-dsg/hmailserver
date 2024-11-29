@@ -1,16 +1,15 @@
 // Copyright (c) 2010 Martin Knafve / hMailServer.com.  
 // http://www.hmailserver.com
 
-using System;
-using System.Collections.Generic;
-using System.Text;
 using hMailServer.Administrator.Nodes;
+using hMailServer.Administrator.Utilities;
 using hMailServer.Shared;
 using Microsoft.Win32;
+using System;
 using System.IO;
 using System.Runtime.InteropServices;
+using System.Text;
 using System.Windows.Forms;
-using hMailServer.Administrator.Utilities;
 
 namespace hMailServer.Administrator
 {
@@ -58,7 +57,7 @@ namespace hMailServer.Administrator
          databasePath = database;
 
          return true;
-         
+
       }
 
       public static string IniReadValue(string file, string section, string key)

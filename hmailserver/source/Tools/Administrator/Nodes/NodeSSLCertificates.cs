@@ -1,12 +1,11 @@
 // Copyright (c) 2010 Martin Knafve / hMailServer.com.  
 // http://www.hmailserver.com
 
+using hMailServer.Administrator.Utilities;
 using System;
 using System.Collections.Generic;
-using System.Text;
-using System.Windows.Forms;
 using System.Runtime.InteropServices;
-using hMailServer.Administrator.Utilities;
+using System.Windows.Forms;
 
 namespace hMailServer.Administrator.Nodes
 {
@@ -18,7 +17,7 @@ namespace hMailServer.Administrator.Nodes
          {
             return "SSL certificates";
          }
-          set { }
+         set { }
       }
 
       public System.Drawing.Color ForeColor { get { return System.Drawing.SystemColors.WindowText; } set { } }

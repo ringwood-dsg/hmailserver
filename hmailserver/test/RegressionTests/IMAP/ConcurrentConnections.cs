@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using hMailServer;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using RegressionTests.Shared;
 
 namespace RegressionTests.IMAP
@@ -33,7 +29,7 @@ namespace RegressionTests.IMAP
 
          Assert.IsTrue(flags2.Contains(@"* 1 FETCH (FLAGS (\Deleted))"), flags2);
          Assert.IsTrue(flags2.Contains(@"* 1 FETCH (FLAGS (\Deleted) UID 1)"), flags2);
-         
+
       }
    }
 }

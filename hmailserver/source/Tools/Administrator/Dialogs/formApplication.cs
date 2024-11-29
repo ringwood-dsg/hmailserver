@@ -6,19 +6,19 @@ using System.Windows.Forms;
 
 namespace hMailServer.Administrator
 {
-    public partial class formApplication : Form
-    {
-        public formApplication()
-        {
-            InitializeComponent();
-            Strings.Localize(this);
-        }
+   public partial class formApplication : Form
+   {
+      public formApplication()
+      {
+         InitializeComponent();
+         Strings.Localize(this);
+      }
 
-        private void formApplication_Load(object sender, EventArgs e)
-        {
+      private void formApplication_Load(object sender, EventArgs e)
+      {
 
-        }
+      }
 
-        
-    }
+
+   }
 }

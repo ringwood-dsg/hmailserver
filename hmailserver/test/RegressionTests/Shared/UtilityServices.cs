@@ -1,5 +1,5 @@
-using NUnit.Framework;
 using hMailServer;
+using NUnit.Framework;
 
 namespace RegressionTests.Shared
 {

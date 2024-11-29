@@ -1,13 +1,11 @@
 ﻿// Copyright (c) 2010 Martin Knafve / hMailServer.com.  
 // http://www.hmailserver.com
 
-using System;
-using System.Collections.Generic;
+using hMailServer;
 using NUnit.Framework;
 using RegressionTests.Infrastructure;
-using RegressionTests.SMTP;
 using RegressionTests.Shared;
-using hMailServer;
+using System.Collections.Generic;
 
 namespace RegressionTests.Security
 {
@@ -126,7 +124,7 @@ namespace RegressionTests.Security
          var deliveryResults = new Dictionary<string, int>();
          deliveryResults["dummy@dummy-example.com"] = 250;
 
-         
+
          using (var server = new SmtpServerSimulator(1, smtpServerPort))
          {
             server.AddRecipientResult(deliveryResults);
@@ -137,7 +135,7 @@ namespace RegressionTests.Security
             smtpClientSimulator.Send("someexternaladdress@example.com", "dummy@dummy-example.com", "Mail 1", "Mail 1");
 
             server.WaitForCompletion();
-         
+
             Assert.IsTrue(server.MessageData.Contains("Mail 1"), server.MessageData);
          }
       }

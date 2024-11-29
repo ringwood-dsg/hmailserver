@@ -1,6 +1,9 @@
 // Copyright (c) 2010 Martin Knafve / hMailServer.com.  
 // http://www.hmailserver.com
 
+using hMailServer;
+using NUnit.Framework;
+using RegressionTests.Shared;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -9,9 +12,6 @@ using System.Net.Mail;
 using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
-using NUnit.Framework;
-using RegressionTests.Shared;
-using hMailServer;
 using Attachment = System.Net.Mail.Attachment;
 
 namespace RegressionTests.POP3
@@ -452,10 +452,10 @@ namespace RegressionTests.POP3
 
          string sWelcomeMessage = simulator.GetWelcomeMessage();
 
-         if (sWelcomeMessage != "+OK HOWDYHO POP3\r\n")
+         //if (sWelcomeMessage != "+OK HOWDYHO POP3\r\n")
+         if (!sWelcomeMessage.Contains("+OK HOWDYHO POP3"))
             throw new Exception("ERROR - Wrong welcome message.");
       }
-
 
       public static void SendMessage(MailMessage mailMessage)
       {

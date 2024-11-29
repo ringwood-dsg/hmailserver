@@ -1,13 +1,13 @@
 // Copyright (c) 2010 Martin Knafve / hMailServer.com.  
 // http://www.hmailserver.com
 
+using hMailServer;
+using NUnit.Framework;
+using RegressionTests.Shared;
 using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Text;
-using NUnit.Framework;
-using RegressionTests.Shared;
-using hMailServer;
 
 namespace RegressionTests.Infrastructure.Persistence
 {
@@ -256,7 +256,7 @@ namespace RegressionTests.Infrastructure.Persistence
          Assert.Fail("Duplicate domain name was permitted.");
       }
 
-      
+
       [Test]
       public void TestDomainNameDuplicateDomainRename()
       {

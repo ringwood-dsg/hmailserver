@@ -768,14 +768,14 @@ namespace hMailServer.Administrator
 
         #endregion
 
-        private System.Windows.Forms.TabControl tabControl;
-        private System.Windows.Forms.TabPage tabPageGeneral;
-        private System.Windows.Forms.TabPage tabPageAutoReply;
-        private System.Windows.Forms.TabPage tabPageForwarding;
-        private System.Windows.Forms.TabPage tabPageSignature;
-        private System.Windows.Forms.TabPage tabPageExternalAccounts;
+       private System.Windows.Forms.TabControl tabControl;
+       private System.Windows.Forms.TabPage tabPageGeneral;
+       private System.Windows.Forms.TabPage tabPageAutoReply;
+       private System.Windows.Forms.TabPage tabPageForwarding;
+       private System.Windows.Forms.TabPage tabPageSignature;
+       private System.Windows.Forms.TabPage tabPageExternalAccounts;
        private System.Windows.Forms.TabPage tabPageRules;
-        private System.Windows.Forms.TabPage tabPageActiveDirectory;
+       private System.Windows.Forms.TabPage tabPageActiveDirectory;
        private System.Windows.Forms.TabPage tabPageAdvanced;
        private System.Windows.Forms.Label labelAddress;
        private hMailServer.Shared.ucText textMaxSize;

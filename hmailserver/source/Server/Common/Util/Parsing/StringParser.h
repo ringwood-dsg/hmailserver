@@ -8,10 +8,10 @@ namespace HM
    class StringParser  
    {
    public:
-	   StringParser();
-	   virtual ~StringParser();
+      StringParser();
+      virtual ~StringParser();
 
-	   static String ExtractDomain(const String &sEMailAddress);
+      static String ExtractDomain(const String &sEMailAddress);
       static String ExtractAddress(const String &sEMailAddress);
 
       static bool IsValidEmailAddress(const String &sEmailAddress);
@@ -37,6 +37,7 @@ namespace HM
 
       static void Base64Encode(const String &sInput, String &sOutput);
       static void Base64Decode(const String &sInput, String &sOutput);
+      static bool IsBase64NullDelimited(const String &sInput);
       
       static bool IsValidIPAddress(const String &sAddress);
       static String ToUSASCII(const String &sInput);

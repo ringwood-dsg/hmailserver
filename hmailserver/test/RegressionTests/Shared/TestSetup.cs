@@ -1,22 +1,18 @@
 // Copyright (c) 2010 Martin Knafve / hMailServer.com.  
 // http://www.hmailserver.com
 
+using hMailServer;
+using NUnit.Framework;
+using RegressionTests.Infrastructure;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Net;
-using System.Net.Mail;
 using System.Net.Sockets;
 using System.Reflection;
 using System.Runtime.InteropServices;
-using System.Security.Cryptography;
-using System.ServiceProcess;
 using System.Text;
 using System.Threading;
-using NUnit.Framework;
-using hMailServer;
-using RegressionTests.Infrastructure;
 
 namespace RegressionTests.Shared
 {
@@ -90,6 +86,9 @@ namespace RegressionTests.Shared
             restartRequired = true;
          }
 
+         if (!string.IsNullOrEmpty(_settings.WelcomePOP3))
+            _settings.WelcomePOP3 = string.Empty;
+
          if (_settings.AutoBanOnLogonFailure)
             _settings.AutoBanOnLogonFailure = false;
 
@@ -149,10 +148,13 @@ namespace RegressionTests.Shared
 
          if (_settings.IMAPSASLPlainEnabled)
             _settings.IMAPSASLPlainEnabled = false;
+
          if (_settings.IMAPSASLInitialResponseEnabled)
             _settings.IMAPSASLInitialResponseEnabled = false;
+         /*
          if (_settings.IMAPAuthAllowPlainText)
             _settings.IMAPAuthAllowPlainText = false;
+         */
          if (!string.IsNullOrEmpty(_settings.IMAPMasterUser))
             _settings.IMAPMasterUser = string.Empty;
 
@@ -189,8 +191,8 @@ namespace RegressionTests.Shared
 
          if (!_settings.TlsVersion13Enabled)
          {
-             _settings.TlsVersion13Enabled = true;
-             restartRequired = true;
+            _settings.TlsVersion13Enabled = true;
+            restartRequired = true;
          }
 
 
@@ -226,13 +228,19 @@ namespace RegressionTests.Shared
 
          return domain;
       }
-	  
+
+      /*
       private string GetCipherList()
       {
          return
             "ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-AES256-GCM-SHA384:DHE-RSA-AES128-GCM-SHA256:DHE-DSS-AES128-GCM-SHA256:kEDH+AESGCM:ECDHE-RSA-AES128-SHA256:ECDHE-ECDSA-AES128-SHA256:ECDHE-RSA-AES128-SHA:ECDHE-ECDSA-AES128-SHA:ECDHE-RSA-AES256-SHA384:ECDHE-ECDSA-AES256-SHA384:ECDHE-RSA-AES256-SHA:ECDHE-ECDSA-AES256-SHA:DHE-RSA-AES128-SHA256:DHE-RSA-AES128-SHA:DHE-DSS-AES128-SHA256:DHE-RSA-AES256-SHA256:DHE-DSS-AES256-SHA:DHE-RSA-AES256-SHA:AES128-GCM-SHA256:AES256-GCM-SHA384:ECDHE-RSA-RC4-SHA:ECDHE-ECDSA-RC4-SHA:AES128:AES256:RC4-SHA:HIGH:!aNULL:!eNULL:!EXPORT:!DES:!3DES:!MD5:!PSK;";
       }
+      */
 
+      private string GetCipherList()
+      {
+         return "ALL:!COMPLEMENTOFDEFAULT:!eNULL";
+      }
 
       private void SetupBlockedAttachments()
       {
@@ -411,7 +419,7 @@ namespace RegressionTests.Shared
       {
          Domains domains = application.Domains;
 
-         while (domains.Count 
+         while (domains.Count
             > 0)
          {
             Domain domain = domains[0];
@@ -452,6 +460,9 @@ namespace RegressionTests.Shared
 
          if (antiSpam.UseSPF)
             antiSpam.UseSPF = false;
+
+         if (antiSpam.CheckPTR)
+            antiSpam.CheckPTR = false;
 
          if (antiSpam.MaximumMessageSize != 1024)
             antiSpam.MaximumMessageSize = 1024;
@@ -614,7 +625,7 @@ namespace RegressionTests.Shared
          return s;
       }
 
-      
+
       public static string ReadExistingTextFile(string fileName)
       {
          CustomAsserts.AssertFileExists(fileName, false);

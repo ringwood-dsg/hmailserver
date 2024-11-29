@@ -1,13 +1,13 @@
 // Copyright (c) 2010 Martin Knafve / hMailServer.com.  
 // http://www.hmailserver.com
 
-using System;
-using System.Collections.Generic;
-using System.Windows.Forms;
-using System.DirectoryServices;
-using System.DirectoryServices.ActiveDirectory;
 using hMailServer.Administrator.Utilities;
 using hMailServer.Shared;
+using System;
+using System.Collections.Generic;
+using System.DirectoryServices;
+using System.DirectoryServices.ActiveDirectory;
+using System.Windows.Forms;
 
 namespace hMailServer.Administrator.Dialogs
 {
@@ -75,7 +75,7 @@ namespace hMailServer.Administrator.Dialogs
       {
          System.DirectoryServices.ActiveDirectory.Domain domain = GetSelectedDomain();
          DirectoryEntry directoryEntry = new DirectoryEntry("LDAP://" + domain.Name);
-         
+
          return directoryEntry;
       }
 

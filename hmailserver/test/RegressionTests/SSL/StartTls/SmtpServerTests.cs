@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Reflection;
-using System.Runtime.Remoting;
-using System.Text;
-using System.Threading;
-using hMailServer;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using RegressionTests.Infrastructure;
 using RegressionTests.Shared;
+using System.Threading;
 
 namespace RegressionTests.SSL.StartTls
 {

@@ -1,11 +1,11 @@
 // Copyright (c) 2010 Martin Knafve / hMailServer.com.  
 // http://www.hmailserver.com
 
-using System;
-using System.IO;
+using hMailServer;
 using NUnit.Framework;
 using RegressionTests.Shared;
-using hMailServer;
+using System;
+using System.IO;
 
 namespace RegressionTests.Infrastructure
 {
@@ -36,10 +36,10 @@ namespace RegressionTests.Infrastructure
          // Wait for the auto-reply.
          string text = Pop3ClientSimulator.AssertGetFirstMessageText(account2.Address, "test");
 
-         Assert.IsFalse(text.Contains("Return-Path: account2@test.com"));
-         Assert.IsFalse(text.Contains("Return-Path: account1@test.com"));
-         Assert.IsTrue(text.Contains("Return-Path: original-address@test.com"));
-         
+         Assert.IsFalse(text.Contains("Return-Path: <account2@test.com>"));
+         Assert.IsFalse(text.Contains("Return-Path: <account1@test.com>"));
+         Assert.IsTrue(text.Contains("Return-Path: <original-address@test.com>"));
+
       }
 
       [Test]
@@ -81,9 +81,9 @@ namespace RegressionTests.Infrastructure
          // Wait for the auto-reply.
          string text = Pop3ClientSimulator.AssertGetFirstMessageText(account2.Address, "test");
 
-         Assert.IsFalse(text.Contains("Return-Path: account-a@test.com"));
-         Assert.IsFalse(text.Contains("Return-Path: account2@test.com"));
-         Assert.IsTrue(text.Contains("Return-Path: external@test.com"));
+         Assert.IsFalse(text.Contains("Return-Path: <account-a@test.com>"));
+         Assert.IsFalse(text.Contains("Return-Path: <account2@test.com>"));
+         Assert.IsTrue(text.Contains("Return-Path: <external@test.com>"));
       }
 
       [Test]
@@ -316,7 +316,7 @@ namespace RegressionTests.Infrastructure
          var message = Pop3ClientSimulator.AssertGetFirstMessageText(list.Address, "test");
 
 
-         Assert.IsTrue(message.Contains("Return-Path: sender@test.com"));
+         Assert.IsTrue(message.Contains("Return-Path: <sender@test.com>"));
       }
 
       [Test]

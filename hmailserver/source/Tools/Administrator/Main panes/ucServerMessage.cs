@@ -1,8 +1,8 @@
-using System;
-using System.Windows.Forms;
 using hMailServer.Administrator.Utilities;
-using System.Runtime.InteropServices;
 using hMailServer.Shared;
+using System;
+using System.Runtime.InteropServices;
+using System.Windows.Forms;
 
 namespace hMailServer.Administrator
 {
@@ -43,7 +43,7 @@ namespace hMailServer.Administrator
 
 
          textMessage.Text = _representedObject.Text;
-      }  
+      }
 
       public bool SaveData()
       {

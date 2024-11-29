@@ -2,8 +2,6 @@
 // http://www.hmailserver.com
 
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace hMailServer.Administrator.Utilities.Localization
 {
@@ -44,7 +42,7 @@ namespace hMailServer.Administrator.Utilities.Localization
          }
 
          throw new Exception("Unknown administration level");
-         
+
       }
 
       public static string GetDatabaseServerTypeName(hMailServer.eDBtype dbType)

@@ -1,9 +1,9 @@
 // Copyright (c) 2010 Martin Knafve / hMailServer.com.  
 // http://www.hmailserver.com
 
+using hMailServer.Shared;
 using System;
 using System.Windows.Forms;
-using hMailServer.Shared;
 
 namespace hMailServer.Administrator.Controls
 {
@@ -38,7 +38,7 @@ namespace hMailServer.Administrator.Controls
                return;
 
             string before = value.Substring(0, atPos);
-            string after = value.Substring(atPos+1);
+            string after = value.Substring(atPos + 1);
 
             textMailbox.Text = before;
             textDomainName.Text = after;
@@ -93,7 +93,7 @@ namespace hMailServer.Administrator.Controls
 
       public bool ReadOnlyHost
       {
-         set 
+         set
          {
             textDomainName.Enabled = !value;
          }

@@ -1017,7 +1017,6 @@ namespace HM
       String sCC = pHeader->GetRawFieldValue("CC");
       String sXRCPTTo = pHeader->GetRawFieldValue("X-RCPT-TO");
       String sXEnvelopeTo = pHeader->GetRawFieldValue("X-Envelope-To");
-
       String sAllRecipients = sTo + "," + sCC + "," + sXRCPTTo + "," + sXEnvelopeTo;
       */
 

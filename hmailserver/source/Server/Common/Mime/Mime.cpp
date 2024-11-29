@@ -1144,7 +1144,7 @@ namespace HM
 
       std::shared_ptr<ByteBuffer> pUnencodedBuffer = oFile.ReadFile();
 
-      if (!pUnencodedBuffer)
+      if (pUnencodedBuffer->GetSize() == 0)
          return false;
 
       // Encode the file, to base64 or likewise.

@@ -6,7 +6,6 @@ using System.Collections.Generic;
 using System.Net;
 using System.Security.Authentication;
 using System.Text;
-using NUnit.Framework;
 
 namespace RegressionTests.Shared
 {
@@ -74,7 +73,7 @@ namespace RegressionTests.Shared
          errorMessage = SendAndReceive(base64Password + "\r\n");
          if (!errorMessage.StartsWith("235"))
             return false;
-         
+
          return true;
       }
 
@@ -170,12 +169,12 @@ namespace RegressionTests.Shared
 
          // Quit again
          _tcpConnection.Send("QUIT\r\n");
-         
+
          sData = _tcpConnection.Receive();
 
          _tcpConnection.Disconnect();
 
-         
+
       }
 
       public void Send(string sFrom, string sTo, string sSubject, string sBody)
@@ -435,6 +434,6 @@ namespace RegressionTests.Shared
          return dateString;
       }
 
-      
+
    }
 }

@@ -1,14 +1,11 @@
 // Copyright (c) 2010 Martin Knafve / hMailServer.com.  
 // http://www.hmailserver.com
 
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Windows.Forms;
-using hMailServer.Administrator.Utilities;
 using hMailServer.Administrator.Controls;
-using hMailServer.Administrator.Utilities.Localization;
+using hMailServer.Administrator.Utilities;
 using hMailServer.Shared;
+using System;
+using System.Windows.Forms;
 
 namespace hMailServer.Administrator
 {
@@ -19,38 +16,38 @@ namespace hMailServer.Administrator
 
       public Strings()
       {
-         
+
       }
 
       static public string LoadLanguage(string language)
       {
          _languageName = language;
 
-          try
-          {
-              _language = APICreator.Application.GlobalObjects.Languages.get_ItemByName(_languageName);
+         try
+         {
+            _language = APICreator.Application.GlobalObjects.Languages.get_ItemByName(_languageName);
 
-              return _languageName;
-          }
-          catch (Exception)
-          {
-              string message = string.Format("The language which hMailServer is configured to use {0} is not available.\r\nEnglish will be used instead.", language);
-              MessageBox.Show(message, EnumStrings.hMailServerAdministrator, MessageBoxButtons.OK, MessageBoxIcon.Information);
+            return _languageName;
+         }
+         catch (Exception)
+         {
+            string message = string.Format("The language which hMailServer is configured to use {0} is not available.\r\nEnglish will be used instead.", language);
+            MessageBox.Show(message, EnumStrings.hMailServerAdministrator, MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-              try
-              {
-                  _language = APICreator.Application.GlobalObjects.Languages.get_ItemByName("English");
+            try
+            {
+               _language = APICreator.Application.GlobalObjects.Languages.get_ItemByName("English");
 
-                  return "English";
-              }
-              catch (Exception)
-              {
-                // 
-              }
-          }
+               return "English";
+            }
+            catch (Exception)
+            {
+               // 
+            }
+         }
 
-          return "";
-         
+         return "";
+
       }
 
       static public void Localize(Control container)
@@ -60,7 +57,7 @@ namespace hMailServer.Administrator
 
          Type controlType = container.GetType();
          if (controlType == typeof(TextBox) ||
-             controlType == typeof(ucText) ||   
+             controlType == typeof(ucText) ||
              controlType == typeof(ucDateTimePicker) ||
              controlType == typeof(ucPassword))
          {
@@ -86,7 +83,7 @@ namespace hMailServer.Administrator
          if (container.GetType() == typeof(MenuStrip))
          {
             MenuStrip menu = container as MenuStrip;
-            foreach(ToolStripMenuItem item in menu.Items)
+            foreach (ToolStripMenuItem item in menu.Items)
             {
                Localize(item);
 
@@ -109,7 +106,7 @@ namespace hMailServer.Administrator
          {
             ContextMenuStrip strip = container as ContextMenuStrip;
 
-            foreach(ToolStripItem item in strip.Items)
+            foreach (ToolStripItem item in strip.Items)
             {
                Localize(item);
             }
@@ -117,7 +114,7 @@ namespace hMailServer.Administrator
          }
 
 
-         
+
       }
 
       static public void Localize(ToolStripItem tsItem)
@@ -131,7 +128,7 @@ namespace hMailServer.Administrator
          {
             Localize(item);
          }
-         
+
       }
 
       static public void Localize(ColumnHeader header)

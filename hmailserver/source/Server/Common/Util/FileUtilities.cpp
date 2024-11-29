@@ -203,7 +203,7 @@ namespace HM
       // Read file
       std::shared_ptr<ByteBuffer> pBuffer = oFile.ReadFile();
 
-      if (!pBuffer || pBuffer->GetSize() == 0)
+      if (pBuffer->GetSize() == 0)
       {
          // Could not read from this file.
          return "";
@@ -266,8 +266,8 @@ namespace HM
 
       std::shared_ptr<ByteBuffer> bytes = file.ReadChunk(iCount);
 
-      memcpy(OutBuf, bytes->GetBuffer(), iCount);
-
+      if (bytes->GetSize() > 0)
+         memcpy(OutBuf, bytes->GetBuffer(), iCount);
    }
 
    bool 

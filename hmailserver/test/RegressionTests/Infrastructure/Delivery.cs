@@ -1,10 +1,10 @@
 // Copyright (c) 2010 Martin Knafve / hMailServer.com.  
 // http://www.hmailserver.com
 
-using System.Collections.Generic;
+using hMailServer;
 using NUnit.Framework;
 using RegressionTests.Shared;
-using hMailServer;
+using System.Collections.Generic;
 
 namespace RegressionTests.Infrastructure
 {
@@ -84,7 +84,7 @@ namespace RegressionTests.Infrastructure
 
          // Send 5 messages to this account.
          var smtpClientSimulator = new SmtpClientSimulator();
-         smtpClientSimulator.Send("test@test.com", new List<string> {account1.Address, account2.Address, account3.Address},
+         smtpClientSimulator.Send("test@test.com", new List<string> { account1.Address, account2.Address, account3.Address },
                     "INBOX", "Mirror test message");
 
          Pop3ClientSimulator.AssertMessageCount(mirrorAccount.Address, "test", 1);

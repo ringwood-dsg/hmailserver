@@ -1,8 +1,6 @@
-﻿using System.Runtime.InteropServices;
-using System.Threading;
-using hMailServer;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using RegressionTests.Shared;
+using System.Threading;
 
 namespace RegressionTests.SSL.StartTls
 {
@@ -16,7 +14,7 @@ namespace RegressionTests.SSL.StartTls
       {
          SslSetup.SetupSSLPorts(_application);
 
-         
+
          Thread.Sleep(1000);
       }
 

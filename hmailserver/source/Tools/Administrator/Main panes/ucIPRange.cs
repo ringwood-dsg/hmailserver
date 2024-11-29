@@ -1,13 +1,13 @@
 // Copyright (c) 2010 Martin Knafve / hMailServer.com.  
 // http://www.hmailserver.com
 
+using hMailServer.Administrator.Nodes;
+using hMailServer.Administrator.Utilities;
+using hMailServer.Shared;
 using System;
 using System.Drawing;
-using System.Windows.Forms;
-using hMailServer.Administrator.Utilities;
-using hMailServer.Administrator.Nodes;
 using System.Runtime.InteropServices;
-using hMailServer.Shared;
+using System.Windows.Forms;
 
 namespace hMailServer.Administrator
 {
@@ -21,19 +21,19 @@ namespace hMailServer.Administrator
 
          if (securityRangeID > 0)
          {
-             hMailServer.SecurityRanges securityRanges = APICreator.SecurityRanges;
-             
+            hMailServer.SecurityRanges securityRanges = APICreator.SecurityRanges;
+
             try
             {
                _representedObject = securityRanges.get_ItemByDBID(securityRangeID);
             }
             catch (Exception)
             {
-               MessageBox.Show(Strings.Localize("The IP range does not exist."), EnumStrings.hMailServerAdministrator,MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+               MessageBox.Show(Strings.Localize("The IP range does not exist."), EnumStrings.hMailServerAdministrator, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
 
                this.Enabled = false;
             }
-            
+
             Marshal.ReleaseComObject(securityRanges);
          }
 
@@ -96,10 +96,10 @@ namespace hMailServer.Administrator
 
       private void EnableDisable()
       {
-          checkRequireSMTPAuthLocalToLocal.Enabled = checkAllowDeliveiesFromL2L.Checked;
-          checkRequireSMTPAuthLocalToExternal.Enabled = checkAllowDeliveiesFromL2R.Checked;
-          checkRequireSMTPAuthExternalToLocal.Enabled = checkAllowDeliveiesFromR2L.Checked;
-          checkRequireSMTPAuthExternalToExternal.Enabled = checkAllowDeliveiesFromR2R.Checked;
+         checkRequireSMTPAuthLocalToLocal.Enabled = checkAllowDeliveiesFromL2L.Checked;
+         checkRequireSMTPAuthLocalToExternal.Enabled = checkAllowDeliveiesFromL2R.Checked;
+         checkRequireSMTPAuthExternalToLocal.Enabled = checkAllowDeliveiesFromR2L.Checked;
+         checkRequireSMTPAuthExternalToExternal.Enabled = checkAllowDeliveiesFromR2R.Checked;
       }
 
       public bool SaveData()
@@ -111,7 +111,7 @@ namespace hMailServer.Administrator
             hMailServer.Settings settings = app.Settings;
             hMailServer.SecurityRanges securityRanges = settings.SecurityRanges;
             _representedObject = securityRanges.Add();
-            
+
             newObject = true;
 
             Marshal.ReleaseComObject(settings);
@@ -119,7 +119,7 @@ namespace hMailServer.Administrator
          }
 
          _representedObject.Name = textName.Text;
-         _representedObject.Priority= textPriority.Number;
+         _representedObject.Priority = textPriority.Number;
 
          _representedObject.LowerIP = textLowerIPAddress.Text;
          _representedObject.UpperIP = textUpperIPAddress.Text;
@@ -154,8 +154,8 @@ namespace hMailServer.Administrator
             MessageBox.Show(e.Message, EnumStrings.hMailServerAdministrator, MessageBoxButtons.OK, MessageBoxIcon.Warning);
             return false;
          }
-         
-         
+
+
          // Refresh the node in the tree if the name has changed.
          IMainForm mainForm = Instances.MainForm;
          mainForm.RefreshCurrentNode(checkExpires.Checked ? Color.Red : Color.Black, textName.Text);
@@ -196,28 +196,28 @@ namespace hMailServer.Administrator
 
       private void checkRequireSMTPAuthentication_CheckedChanged(object sender, EventArgs e)
       {
-          EnableDisable();
+         EnableDisable();
       }
 
       private void checkAllowDeliveiesFromL2L_CheckedChanged(object sender, EventArgs e)
       {
-          EnableDisable();
+         EnableDisable();
       }
 
       private void checkAllowDeliveiesFromL2R_CheckedChanged(object sender, EventArgs e)
       {
-          EnableDisable();
+         EnableDisable();
       }
 
       private void checkAllowDeliveiesFromR2L_CheckedChanged(object sender, EventArgs e)
       {
-          EnableDisable();
+         EnableDisable();
       }
 
       private void checkAllowDeliveiesFromR2R_CheckedChanged(object sender, EventArgs e)
       {
-          EnableDisable();
+         EnableDisable();
       }
-    
+
    }
 }

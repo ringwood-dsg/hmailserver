@@ -1,13 +1,12 @@
 // Copyright (c) 2010 Martin Knafve / hMailServer.com.  
 // http://www.hmailserver.com
 
-using System;
-using System.IO;
-using System.Threading;
+using hMailServer;
 using NUnit.Framework;
 using RegressionTests.Infrastructure;
 using RegressionTests.Shared;
-using hMailServer;
+using System;
+using System.Threading;
 
 namespace RegressionTests.SSL
 {
@@ -22,7 +21,7 @@ namespace RegressionTests.SSL
          Thread.Sleep(1000);
       }
 
-      
+
       [Test]
       [Category("SSL")]
       [Description("Confirm that the TCP/IP log contains information on when a SSL handshake fails")]
@@ -149,7 +148,7 @@ namespace RegressionTests.SSL
          using (var tcpConn = new TcpConnection(false))
          {
             tcpConn.Connect(25001);
-            
+
             // Since there may be other connections lingering, we just check the increased count if
             // it was zero previous to this test. Otherwise we might end up with false positives.
             if (countBefore == 0)

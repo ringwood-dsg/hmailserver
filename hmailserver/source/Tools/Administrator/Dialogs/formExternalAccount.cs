@@ -1,11 +1,11 @@
 // Copyright (c) 2010 Martin Knafve / hMailServer.com.  
 // http://www.hmailserver.com
 
+using hMailServer.Administrator.Utilities;
+using hMailServer.Shared;
 using System;
 using System.Drawing;
 using System.Windows.Forms;
-using hMailServer.Administrator.Utilities;
-using hMailServer.Shared;
 
 namespace hMailServer.Administrator.Dialogs
 {
@@ -29,9 +29,9 @@ namespace hMailServer.Administrator.Dialogs
          textMIMERecipientHeaders.Text = "To,CC,X-RCPT-TO,X-Envelope-To";
 
          DirtyChecker.SubscribeToChange(this, OnContentChanged);
-         
+
          buttonDownloadNow.Enabled = false;
-         
+
          comboConnectionSecurity.AddItems(ConnectionSecurityTypes.Get(false));
          comboConnectionSecurity.SelectedIndex = 0;
 
@@ -40,7 +40,7 @@ namespace hMailServer.Administrator.Dialogs
 
       private void OnContentChanged(object sender, EventArgs e)
       {
-         
+
          EnableDisable();
       }
 
@@ -104,9 +104,9 @@ namespace hMailServer.Administrator.Dialogs
          fetchAccount.ProcessMIMEDate = checkProcessMIMEDate.Checked;
          fetchAccount.ProcessMIMERecipients = checkProcessMIMERecipients.Checked && checkProcessMIMERecipients.Enabled;
          fetchAccount.ServerAddress = textServer.Text;
-         fetchAccount.ServerType = (int) comboServerType.SelectedValue;
+         fetchAccount.ServerType = (int)comboServerType.SelectedValue;
          fetchAccount.Username = textUsername.Text;
-         fetchAccount.ConnectionSecurity = (eConnectionSecurity) comboConnectionSecurity.SelectedValue;
+         fetchAccount.ConnectionSecurity = (eConnectionSecurity)comboConnectionSecurity.SelectedValue;
          fetchAccount.UseAntiSpam = checkUseAntiSpam.Checked;
          fetchAccount.UseAntiVirus = checkUseAntiVirus.Checked;
          fetchAccount.EnableRouteRecipients = checkEnableRouteRecipients.Checked && checkEnableRouteRecipients.Enabled;
@@ -135,15 +135,15 @@ namespace hMailServer.Administrator.Dialogs
 
       private void buttonDownloadNow_Click(object sender, EventArgs e)
       {
-          // save properties prior to downloading, so we have
-          // the latest settings.
-          if (_fetchAccount != null)
-          {
-              SaveAccountProperties(_fetchAccount);
-              _fetchAccount.Save();
-              _fetchAccount.DownloadNow();
-              this.Close();
-          }
+         // save properties prior to downloading, so we have
+         // the latest settings.
+         if (_fetchAccount != null)
+         {
+            SaveAccountProperties(_fetchAccount);
+            _fetchAccount.Save();
+            _fetchAccount.DownloadNow();
+            this.Close();
+         }
       }
 
       private void checkProcessMIMEDate_CheckedChanged(object sender, EventArgs e)
@@ -168,27 +168,27 @@ namespace hMailServer.Administrator.Dialogs
 
       private void comboConnectionSecurity_SelectedIndexChanged(object sender, EventArgs e)
       {
-          if (_isLoading)
-              return;
+         if (_isLoading)
+            return;
 
-          if ((eConnectionSecurity)comboConnectionSecurity.SelectedValue == eConnectionSecurity.eCSTLS)
-              textPort.Number = 995;
-          else
-              textPort.Number = 110;
+         if ((eConnectionSecurity)comboConnectionSecurity.SelectedValue == eConnectionSecurity.eCSTLS)
+            textPort.Number = 995;
+         else
+            textPort.Number = 110;
 
-          textPort.Font = new Font(this.Font, FontStyle.Bold);
+         textPort.Font = new Font(this.Font, FontStyle.Bold);
 
-          if (_timer != null)
-              _timer.Stop();
+         if (_timer != null)
+            _timer.Stop();
 
-          _timer = new Timer();
-          _timer.Interval = 3000;
-          _timer.Tick += (s, ev) =>
-          {
-              textPort.Font = new Font(this.Font, FontStyle.Regular);
-              _timer.Stop();
-          };
-          _timer.Start();
+         _timer = new Timer();
+         _timer.Interval = 3000;
+         _timer.Tick += (s, ev) =>
+         {
+            textPort.Font = new Font(this.Font, FontStyle.Regular);
+            _timer.Stop();
+         };
+         _timer.Start();
       }
    }
 }

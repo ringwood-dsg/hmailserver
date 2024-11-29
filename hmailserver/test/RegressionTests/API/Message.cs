@@ -1,16 +1,16 @@
 ﻿// Copyright (c) 2010 Martin Knafve / hMailServer.com.  
 // http://www.hmailserver.com
 
+using hMailServer;
+using NUnit.Framework;
+using RegressionTests.Infrastructure;
+using RegressionTests.Shared;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net.Mail;
 using System.Reflection;
 using System.Text;
-using NUnit.Framework;
-using RegressionTests.Infrastructure;
-using RegressionTests.Shared;
-using hMailServer;
 using Attachment = System.Net.Mail.Attachment;
 
 namespace RegressionTests.API

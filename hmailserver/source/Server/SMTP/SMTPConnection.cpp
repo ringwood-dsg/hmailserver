@@ -168,7 +168,7 @@ namespace HM
    {
 
       String sWelcome = Configuration::Instance()->GetSMTPConfiguration()->GetWelcomeMessage();
-      
+
       String sESMTP = " ESMTP";
 
       String sData = "220 ";
@@ -240,6 +240,8 @@ namespace HM
 
          String sLogData = sClientData;
 
+         String delimiter = "\\t", passwordmask = "***";
+
          String sRegex = "^(?>AUTH PLAIN )((?:[A-Z\\d+/]{4})*(?:[A-Z\\d+/]{3}=|[A-Z\\d+/]{2}==)?)$";
          boost::wregex expression(sRegex, boost::wregex::icase);
          boost::wsmatch matches;
@@ -253,15 +255,19 @@ namespace HM
                String sBase64Encoded = matches[1];
                StringParser::Base64Decode(sBase64Encoded, sAuthentication);
 
-               // Extract the username from the decoded string.
-               int iSecondTab = sAuthentication.Find(_T("\t"), 1);
-               if (iSecondTab > 0)
+               if (StringParser::IsBase64NullDelimited(sBase64Encoded))
+                  delimiter = "\\0";
+
+               std::vector<String> plain_args = StringParser::SplitString(sAuthentication, "\t");
+
+               if (plain_args.size() == 3 && plain_args[1].GetLength() > 0)
                {
-                  String username = sAuthentication.Mid(1, iSecondTab - 1);
-                  //sLogData = "AUTH PLAIN " + username + " ***";
-                  String usernameBase64Encoded;
-                  StringParser::Base64Encode(username, usernameBase64Encoded);
-                  sLogData = "AUTH PLAIN " + usernameBase64Encoded + " ***";
+                  String authzid = plain_args[0];
+                  String authcid = plain_args[1];
+                  String authplain = authzid.append(delimiter).append(authcid).append(delimiter).append(passwordmask);
+                  String sCommandBase64Encoded;
+                  StringParser::Base64Encode(authplain, sCommandBase64Encoded);
+                  sLogData = "AUTH PLAIN " + sCommandBase64Encoded;
                }
                else
                {
@@ -275,17 +281,21 @@ namespace HM
             String sAuthentication;
             StringParser::Base64Decode(sClientData, sAuthentication);
 
-            // Extract the username from the decoded string.
-            int iSecondTab = sAuthentication.Find(_T("\t"), 1);
-            if (iSecondTab > 0)
+            if (StringParser::IsBase64NullDelimited(sClientData))
+               delimiter = "\\0";
+
+            std::vector<String> plain_args = StringParser::SplitString(sAuthentication, "\t");
+
+            if (plain_args.size() == 3 && plain_args[1].GetLength() > 0)
             {
-               String username = sAuthentication.Mid(1, iSecondTab - 1);
-               //sLogData = username + " ***";
-               String usernameBase64Encoded;
-               StringParser::Base64Encode(username, usernameBase64Encoded);
-               sLogData = usernameBase64Encoded + " ***";
+               String authzid = plain_args[0];
+               String authcid = plain_args[1];
+               String authplain = authzid.append(delimiter).append(authcid).append(delimiter).append(passwordmask);
+               String sCommandBase64Encoded;
+               StringParser::Base64Encode(authplain, sCommandBase64Encoded);
+               sLogData = sCommandBase64Encoded;
             }
-            else 
+            else
             {
                sLogData = "***";
             }
@@ -293,8 +303,34 @@ namespace HM
          else if (current_state_ == SMTPUPASSWORD)
          {
             sLogData = "***";
-         }         
-         
+         }        
+
+         // AUTH PLAIN is disabled and client send credentials anyway, this should not happen under normal circumstances 
+         // Or client (re)send credentials when not expected/accepted
+         sRegex = "^((?:[A-Z\\d+/]{4})*(?:[A-Z\\d+/]{3}=|[A-Z\\d+/]{2}==)?)$";
+         boost::wregex expr(sRegex, boost::wregex::icase);
+         if (current_state_ == HEADER && boost::regex_match(sClientData, expr))
+         {
+            // Both user name and password in line.
+            String sAuthentication;
+            StringParser::Base64Decode(sClientData, sAuthentication);
+
+            if (StringParser::IsBase64NullDelimited(sClientData))
+               delimiter = "\\0";
+
+            std::vector<String> plain_args = StringParser::SplitString(sAuthentication, "\t");
+
+            if (plain_args.size() == 3 && plain_args[1].GetLength() > 0)
+            {
+               String authzid = plain_args[0];
+               String authcid = plain_args[1];
+               String authplain = authzid.append(delimiter).append(authcid).append(delimiter).append(passwordmask);
+               String sCommandBase64Encoded;
+               StringParser::Base64Encode(authplain, sCommandBase64Encoded);
+               sLogData = sCommandBase64Encoded;
+            }
+         }
+
          // Append
          sLogData = "RECEIVED: " + sLogData;
 
@@ -311,14 +347,14 @@ namespace HM
       {
          switch (current_state_)
          {
-         case DATA:
-            EnqueueRead("");
-            break;
-         case STARTTLS:
-            break;
-         default:
-            EnqueueRead();
-            break;
+            case DATA:
+               EnqueueRead("");
+               break;
+            case STARTTLS:
+               break;
+            default:
+               EnqueueRead();
+               break;
          }
       }
    }
@@ -335,7 +371,7 @@ namespace HM
       if (sRequest.GetLength() > 510)
       {
          // This line is too long... is this an evil user?
-         EnqueueWrite_("500 Line too long.");
+         SendErrorResponse_(500, "Line too long.");
          return;
       }
 
@@ -365,51 +401,50 @@ namespace HM
       switch (current_state_)
       {
          case INITIAL:
-            {
-               requestedAuthenticationType_ = AUTH_NONE;
-               SendErrorResponse_(503, "Bad sequence of commands"); 
-               break;
-            }
+         {
+            requestedAuthenticationType_ = AUTH_NONE;
+            SendErrorResponse_(503, "Bad sequence of commands"); 
+            break;
+         }
          case HEADER:
+         {
+            switch (eCommandType)
             {
-               switch (eCommandType)
-               {
-                  case SMTP_COMMAND_STARTTLS: ProtocolSTARTTLS_(sRequest); break;
-                  case SMTP_COMMAND_AUTH: ProtocolAUTH_(sRequest); break;
-                  case SMTP_COMMAND_MAIL: ProtocolMAIL_(sRequest); break;
-                  case SMTP_COMMAND_RCPT: ProtocolRCPT_(sRequest); break;
-                  case SMTP_COMMAND_TURN: EnqueueWrite_("502 TURN disallowed."); break;
-                  case SMTP_COMMAND_ETRN: ProtocolETRN_(sRequest); break;
-                  case SMTP_COMMAND_VRFY: EnqueueWrite_("502 VRFY disallowed."); break;
-                  case SMTP_COMMAND_DATA: ProtocolDATA_(); break;
-                  default:
-                     SendErrorResponse_(503, "Bad sequence of commands"); 
-               }
-               break;
+               case SMTP_COMMAND_STARTTLS: ProtocolSTARTTLS_(sRequest); break;
+               case SMTP_COMMAND_AUTH: ProtocolAUTH_(sRequest); break;
+               case SMTP_COMMAND_MAIL: ProtocolMAIL_(sRequest); break;
+               case SMTP_COMMAND_RCPT: ProtocolRCPT_(sRequest); break;
+               case SMTP_COMMAND_TURN: SendErrorResponse_(502, "TURN disallowed."); break;
+               case SMTP_COMMAND_ETRN: ProtocolETRN_(sRequest); break;
+               case SMTP_COMMAND_VRFY: SendErrorResponse_(502, "VRFY disallowed."); break;
+               case SMTP_COMMAND_DATA: ProtocolDATA_(); break;
+               default:
+                  SendErrorResponse_(503, "Bad sequence of commands"); 
             }
+            break;
+         }
          case SMTPUSERNAME:
+         {
+            if (requestedAuthenticationType_ == AUTH_LOGIN)
             {
-               if (requestedAuthenticationType_ == AUTH_LOGIN)
-               {
-                  ProtocolUsername_(sRequest);
-               }
-               else
-               {
-                  AuthenticateUsingPLAIN_(sRequest);
-               }
-
-               break;
+               ProtocolUsername_(sRequest);
             }
+            else
+            {
+               AuthenticateUsingPLAIN_(sRequest);
+            }
+            break;
+         }
          case SMTPUPASSWORD:
-            {
-               ProtocolPassword_(sRequest);
-               break;
-            }
+         {
+            ProtocolPassword_(sRequest);
+            break;
+         }
          default:
-            {
-               ErrorManager::Instance()->ReportError(ErrorManager::Medium, 5500, "SMTPConnection::InternalParseData", 
-                  Formatter::Format(_T("Received unexpected string data: {0}"), sRequest));
-            }
+         {
+            ErrorManager::Instance()->ReportError(ErrorManager::Medium, 5500, "SMTPConnection::InternalParseData", 
+               Formatter::Format(_T("Received unexpected string data: {0}"), sRequest));
+         }
       }
  
       return;
@@ -465,7 +500,7 @@ namespace HM
 
       if (current_message_) 
       {
-         EnqueueWrite_("503 Issue a reset if you want to start over"); 
+         SendErrorResponse_(503, "Issue a reset if you want to start over");
          return;
       }
      
@@ -554,9 +589,9 @@ namespace HM
       {
          // Message too big. Reject it.
          String sMessage;
-         sMessage.Format(_T("552 Message size exceeds fixed maximum message size. Size: %d KB, Max size: %d KB"), 
-               iEstimatedMessageSize / 1024, max_message_size_kb_);
-         EnqueueWrite_(sMessage);
+         sMessage.Format(_T("Message size exceeds fixed maximum message size. Size: %d KB, Max size: %d KB"),
+            iEstimatedMessageSize / 1024, max_message_size_kb_);
+         SendErrorResponse_(552, sMessage);
          return ;
       }
       
@@ -566,7 +601,7 @@ namespace HM
       // Next time we do a mail from, we should re-authenticate the login credentials
       re_authenticate_user_ = true;
 
-         current_message_ = std::shared_ptr<Message> (new Message);
+      current_message_ = std::shared_ptr<Message> (new Message);
       current_message_->SetFromAddress(sFromAddress);
       current_message_->SetState(Message::Delivering);
       
@@ -635,7 +670,7 @@ namespace HM
 
       if (!current_message_) 
       {
-         EnqueueWrite_("503 Must have sender first."); 
+         SendErrorResponse_(503, "must have sender first.");
          return;
       }
 
@@ -778,7 +813,7 @@ namespace HM
             {
                // The sender is greylisted. We don't log to awstats here,
                // since we tell the client to try again later.
-               SendErrorResponse_(451, "Please try again later.");
+               EnqueueWrite_("451 Please try again later.");
                return;
             }
          }
@@ -838,9 +873,9 @@ namespace HM
          String messageText = GetSpamTestResultMessage_(spam_test_results_);
 
          if (spType == SPPreTransmission)
-            EnqueueWrite_("550 " + messageText);
+            SendErrorResponse_(550, messageText);
          else
-            EnqueueWrite_("554 " + messageText);
+            SendErrorResponse_(554, messageText);
 
          String sLogMessage;
          sLogMessage.Format(_T("hMailServer SpamProtection rejected RCPT (Sender: %s, IP:%s, Reason: %s)"), sFromAddress.c_str(), String(GetIPAddressString()).c_str(), messageText.c_str());
@@ -890,8 +925,16 @@ namespace HM
       {
          std::shared_ptr<MimeHeader> original_headers = Utilities::GetMimeHeader(transmission_buffer_->GetBuffer()->GetBuffer(), transmission_buffer_->GetBuffer()->GetSize());
 
-         SMTPMessageHeaderCreator header_creator(username_, GetIPAddressString(), isAuthenticated_, helo_host_, original_headers);
-         
+         String sEnvelopFrom = current_message_->GetFromAddress();
+         String sEnvelopTo;
+
+         std::shared_ptr<MessageRecipients> pRecipients = current_message_->GetRecipients();
+         std::vector<std::shared_ptr<MessageRecipient> >& recipients = pRecipients->GetVector();
+         if (recipients.size() > 0 && recipients.size() < 2)
+            sEnvelopTo = (*recipients.begin())->GetOriginalAddress();
+
+         SMTPMessageHeaderCreator header_creator(username_, sEnvelopFrom, sEnvelopTo, GetIPAddressString(), isAuthenticated_, helo_host_, original_headers);
+
          if (IsSSLConnection())
             header_creator.SetCipherInfo(GetCipherInfo());
 
@@ -949,9 +992,9 @@ namespace HM
             iBufSizeKB, iMaxSizeDrop);
             LOG_SMTP(GetSessionID(), GetIPAddressString(), sLogData);      
             String sMessage;
-            sMessage.Format(_T("552 Message size exceeds the drop maximum message size. Size: %d KB, Max size: %d KB - DROP!"), 
-                iBufSizeKB, iMaxSizeDrop);
-            EnqueueWrite_(sMessage);
+            sMessage.Format(_T("Message size exceeds the drop maximum message size. Size: %d KB, Max size: %d KB - DROP!"),
+               iBufSizeKB, iMaxSizeDrop);
+            SendErrorResponse_(552, sMessage);
             LogAwstatsMessageRejected_();
             ResetCurrentMessage_();
             SetReceiveBinary(false);
@@ -1160,7 +1203,7 @@ namespace HM
             // The delivery of the message failed. This may happen if tables are
             // corrupt in the database. We now return an error message to the sender. 
             // Hopefully, the sending server will retry later. 
-            EnqueueWrite_("554 Your message was received but it could not be saved. Please retry later.");
+            EnqueueWrite_("451 Your message was received but it could not be saved. Please retry later.");
 
             // Delete the file now since we could not save it in the database.
             ResetCurrentMessage_();
@@ -1225,7 +1268,10 @@ namespace HM
    {
       if (transmission_buffer_->GetCancelTransmission())
       {
-         EnqueueWrite_("554 "  + transmission_buffer_->GetCancelMessage());
+
+         String sMessage = transmission_buffer_->GetCancelMessage();
+         SendErrorResponse_(554, sMessage);
+
          LogAwstatsMessageRejected_();
          return false;
       }
@@ -1244,9 +1290,9 @@ namespace HM
       if (max_message_size_kb_ > 0 && (transmission_buffer_->GetSize() / 1024) > max_message_size_kb_)
       {
          String sMessage;
-         sMessage.Format(_T("554 Rejected - Message size exceeds fixed maximum message size. Size: %d KB, Max size: %d KB"), 
+         sMessage.Format(_T("Rejected - Message size exceeds fixed maximum message size. Size: %d KB, Max size: %d KB"),
             transmission_buffer_->GetSize() / 1024, max_message_size_kb_);
-         EnqueueWrite_(sMessage);
+         SendErrorResponse_(554, sMessage);
          LogAwstatsMessageRejected_();
          return false;
       }
@@ -1256,10 +1302,7 @@ namespace HM
       {
          if (!CheckLineEndings_())
          {
-            String sMessage;
-            sMessage.Format(_T("554 Rejected - Message containing bare LF's."));
-            
-            EnqueueWrite_(sMessage);
+            SendErrorResponse_(554, "Rejected - Message containing bare LF's.");
             LogAwstatsMessageRejected_();
             return false;
          }
@@ -1296,21 +1339,20 @@ namespace HM
 
          switch (pResult->GetValue())
          {
-         case 1:
+            case 1:
             {
-               String sErrorMessage = "554 Rejected";
-               EnqueueWrite_(sErrorMessage);
+               SendErrorResponse_(554, "Rejected");
                LogAwstatsMessageRejected_();
                return false;
             }
-         case 2:
+            case 2:
             {
-               String sErrorMessage = "554 " + pResult->GetMessage();
-               EnqueueWrite_(sErrorMessage);
+               String sErrorMessage = pResult->GetMessage();
+               SendErrorResponse_(554, sErrorMessage);
                LogAwstatsMessageRejected_();
                return false;
             }
-         case 3:
+            case 3:
             {
                String sErrorMessage = "453 " + pResult->GetMessage();
                EnqueueWrite_(sErrorMessage);
@@ -1632,27 +1674,26 @@ namespace HM
 
          switch (pResult->GetValue())
          {
-         case 1:
-         {
-            String sErrorMessage = "554 Rejected";
-            EnqueueWrite_(sErrorMessage);
-            LogAwstatsMessageRejected_();
-            return;
-         }
-         case 2:
-         {
-            String sErrorMessage = "554 " + pResult->GetMessage();
-            EnqueueWrite_(sErrorMessage);
-            LogAwstatsMessageRejected_();
-            return;
-         }
-         case 3:
-         {
-            String sErrorMessage = "453 " + pResult->GetMessage();
-            EnqueueWrite_(sErrorMessage);
-            LogAwstatsMessageRejected_();
-            return;
-         }
+            case 1:
+            {
+               SendErrorResponse_(554, "Rejected");
+               LogAwstatsMessageRejected_();
+               return;
+            }
+            case 2:
+            {
+               String sErrorMessage = pResult->GetMessage();
+               SendErrorResponse_(554, sErrorMessage);
+               LogAwstatsMessageRejected_();
+               return;
+            }
+            case 3:
+            {
+               String sErrorMessage = "453 " + pResult->GetMessage();
+               EnqueueWrite_(sErrorMessage);
+               LogAwstatsMessageRejected_();
+               return;
+            }
          }
       }
 
@@ -1704,27 +1745,26 @@ namespace HM
 
          switch (pResult->GetValue())
          {
-         case 1:
-         {
-            String sErrorMessage = "554 Rejected";
-            EnqueueWrite_(sErrorMessage);
-            LogAwstatsMessageRejected_();
-            return;
-         }
-         case 2:
-         {
-            String sErrorMessage = "554 " + pResult->GetMessage();
-            EnqueueWrite_(sErrorMessage);
-            LogAwstatsMessageRejected_();
-            return;
-         }
-         case 3:
-         {
-            String sErrorMessage = "453 " + pResult->GetMessage();
-            EnqueueWrite_(sErrorMessage);
-            LogAwstatsMessageRejected_();
-            return;
-         }
+            case 1:
+            {
+               SendErrorResponse_(554, "Rejected");
+               LogAwstatsMessageRejected_();
+               return;
+            }
+            case 2:
+            {
+               String sErrorMessage = pResult->GetMessage();
+               SendErrorResponse_(554, sErrorMessage);
+               LogAwstatsMessageRejected_();
+               return;
+            }
+            case 3:
+            {
+               String sErrorMessage = "453 " + pResult->GetMessage();
+               EnqueueWrite_(sErrorMessage);
+               LogAwstatsMessageRejected_();
+               return;
+            }
          }
       }
 
@@ -1763,14 +1803,14 @@ namespace HM
       if (!current_message_)
       {
          // User tried to send a mail without specifying a correct mail from or rcpt to.
-         EnqueueWrite_("503 Must have sender and recipient first.");
+         SendErrorResponse_(503, "Must have sender and recipient first.");
 
          return;
       }  
       else if ( current_message_->GetRecipients()->GetCount() == 0)
       {
          // User tried to send a mail without specifying a correct mail from or rcpt to.
-         EnqueueWrite_("503 Must have sender and recipient first.");
+         SendErrorResponse_(503, "Must have sender and recipient first.");
 
          return;
       }  
@@ -1806,21 +1846,20 @@ namespace HM
 
          switch (pResult->GetValue())
          {
-         case 1:
+            case 1:
             {
-               String sErrorMessage = "554 Rejected";
-               EnqueueWrite_(sErrorMessage);
+               SendErrorResponse_(554, "Rejected");
                LogAwstatsMessageRejected_();
                return;
             }
-         case 2:
+            case 2:
             {
-               String sErrorMessage = "554 " + pResult->GetMessage();
-               EnqueueWrite_(sErrorMessage);
+               String sErrorMessage = pResult->GetMessage();
+               SendErrorResponse_(554, sErrorMessage);
                LogAwstatsMessageRejected_();
                return;
             }
-         case 3:
+            case 3:
             {
                String sErrorMessage = "453 " + pResult->GetMessage();
                EnqueueWrite_(sErrorMessage);
@@ -1880,7 +1919,7 @@ namespace HM
          SendErrorResponse_(530, "A SSL/TLS-connection is required for authentication.");
          return;
       }
-	  
+     
       // rfc4954 restrictions, After a successful AUTH command completes, 
       // a server MUST reject any further AUTH commands with a 503 reply.
       if (isAuthenticated_) 
@@ -2083,7 +2122,9 @@ namespace HM
      else
      {
          // Send that we don't accept ETRN for that domain or invalid param
-         EnqueueWrite_("501 ETRN not supported for " + sETRNDomain.ToLower());
+         String sMessage;
+         sMessage.Format(_T("ETRN not supported for %s"), sETRNDomain.ToLower());
+         SendErrorResponse_(501, sMessage);
          LOG_SMTP(GetSessionID(), GetIPAddressString(), "SMTPDeliverer - ETRN - Domain is not Route");      
          return;
      }
@@ -2094,20 +2135,25 @@ namespace HM
    {
       String sAuthentication;
       StringParser::Base64Decode(sLine, sAuthentication);
+      std::vector<String> plain_args = StringParser::SplitString(sAuthentication, "\t");
 
-      // Extract the username and password from the decoded string.
-      int iSecondTab = sAuthentication.Find(_T("\t"),1);
-      if (iSecondTab < 0)
+      if (plain_args.size() != 3) 
       {
          RestartAuthentication_();
          return;
       }
 
-      username_ = sAuthentication.Mid(1, iSecondTab-1);
-      password_ = sAuthentication.Mid(iSecondTab+1);
+      if (plain_args[1].GetLength() == 0 || plain_args[2].GetLength() == 0)
+      {
+         RestartAuthentication_();
+         return;
+      }
+
+      username_ = plain_args[1];
+      password_ = plain_args[2];
 
       // Authenticate the user.
-      Authenticate_();      
+      Authenticate_();
    }
 
    void
@@ -2115,7 +2161,7 @@ namespace HM
    {
       AccountLogon accountLogon;
       bool disconnect;
-	  String sUsername = username_;
+      String sUsername = username_;
 
       std::shared_ptr<const Account> pAccount = accountLogon.Logon(GetRemoteEndpointAddress(), username_, password_, disconnect);
          
@@ -2294,7 +2340,7 @@ namespace HM
    {
       if (rejected_by_delayed_grey_listing_)
       {
-         SendErrorResponse_(450, "Please try again later.");
+         EnqueueWrite_("450 Please try again later.");
          // Don't log to awstats here, since we tell the client to try again later.
          return false;
       }

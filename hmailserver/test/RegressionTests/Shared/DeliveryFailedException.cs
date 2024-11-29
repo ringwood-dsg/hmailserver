@@ -7,7 +7,7 @@ namespace RegressionTests.Shared
       public DeliveryFailedException(string message) :
          base(message)
       {
-         
+
       }
    }
 }

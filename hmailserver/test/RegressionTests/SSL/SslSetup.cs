@@ -1,9 +1,9 @@
-﻿using System;
-using System.IO;
-using System.Security.Cryptography.X509Certificates;
-using hMailServer;
+﻿using hMailServer;
 using NUnit.Framework;
 using RegressionTests.Shared;
+using System;
+using System.IO;
+using System.Security.Cryptography.X509Certificates;
 
 namespace RegressionTests.SSL
 {
@@ -39,7 +39,7 @@ namespace RegressionTests.SSL
          settings.TlsVersion11Enabled = sslVersions == null || sslVersions.Tls11;
          settings.TlsVersion12Enabled = sslVersions == null || sslVersions.Tls12;
          settings.TlsVersion13Enabled = sslVersions == null || sslVersions.Tls13;
-         
+
          application.Stop();
          application.Start();
       }

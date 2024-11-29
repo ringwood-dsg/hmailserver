@@ -1,14 +1,14 @@
 ﻿// Copyright (c) 2010 Martin Knafve / hMailServer.com.  
 // http://www.hmailserver.com
 
+using hMailServer;
+using Microsoft.VisualBasic;
+using NUnit.Framework;
+using RegressionTests.Shared;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
-using Microsoft.VisualBasic;
-using NUnit.Framework;
-using RegressionTests.Shared;
-using hMailServer;
 
 namespace RegressionTests.IMAP
 {
@@ -288,9 +288,9 @@ namespace RegressionTests.IMAP
          Assert.IsTrue(simulator.SelectFolder("INBOX"));
 
          Assert.AreEqual("1", simulator.Search("OR SINCE 28-May-2001 ON 28-May-2001 ALL"));
-         
+
          // Searching for mail sent a year from now or a specific date 2012 should not return any matches.
-         var nextYear = DateTime.UtcNow.Year+1;
+         var nextYear = DateTime.UtcNow.Year + 1;
          Assert.That(simulator.Search($"OR SINCE 28-May-{nextYear} ON 28-May-2012 ALL"), Is.Null.Or.Empty);
 
          string formattedToday = DateTime.Now.ToString("dd-MMM-yyyy", CultureInfo.InvariantCulture).ToUpper();

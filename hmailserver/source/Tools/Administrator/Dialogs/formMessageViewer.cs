@@ -1,9 +1,9 @@
 // Copyright (c) 2010 Martin Knafve / hMailServer.com.  
 // http://www.hmailserver.com
 
+using hMailServer.Shared;
 using System;
 using System.Windows.Forms;
-using hMailServer.Shared;
 
 namespace hMailServer.Administrator.Dialogs
 {
@@ -24,8 +24,8 @@ namespace hMailServer.Administrator.Dialogs
       {
          this.Cursor = Cursors.WaitCursor;
 
-         textFile.Text = _filename; 
-         
+         textFile.Text = _filename;
+
          try
          {
             string fileContent = System.IO.File.ReadAllText(_filename);
@@ -34,10 +34,10 @@ namespace hMailServer.Administrator.Dialogs
          }
          catch (System.IO.FileNotFoundException)
          {
-             textMessage.Text =
-                 string.Format(
-                     "The file {0} could not be loaded. The message has probably been delivered to the recipient and is no longer available in the queue.",
-                     _filename);
+            textMessage.Text =
+                string.Format(
+                    "The file {0} could not be loaded. The message has probably been delivered to the recipient and is no longer available in the queue.",
+                    _filename);
          }
          catch (Exception ex)
          {
@@ -49,10 +49,10 @@ namespace hMailServer.Administrator.Dialogs
 
       private void buttonClose_Click(object sender, EventArgs e)
       {
-         
+
       }
 
 
-      
+
    }
 }

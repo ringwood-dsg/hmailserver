@@ -10,9 +10,9 @@
 // InterfaceSettings
 
 class ATL_NO_VTABLE InterfaceSettings : 
-	public CComObjectRootEx<CComSingleThreadModel>,
-	public CComCoClass<InterfaceSettings, &CLSID_Settings>,
-	public IDispatchImpl<IInterfaceSettings, &IID_IInterfaceSettings, &LIBID_hMailServer, /*wMajor =*/ 1, /*wMinor =*/ 0>,
+   public CComObjectRootEx<CComSingleThreadModel>,
+   public CComCoClass<InterfaceSettings, &CLSID_Settings>,
+   public IDispatchImpl<IInterfaceSettings, &IID_IInterfaceSettings, &LIBID_hMailServer, /*wMajor =*/ 1, /*wMinor =*/ 0>,
    public HM::COMAuthenticator,
    public ISupportErrorInfo
 {
@@ -25,22 +25,22 @@ DECLARE_REGISTRY_RESOURCEID(IDR_INTERFACESETTINGS)
 
 
 BEGIN_COM_MAP(InterfaceSettings)
-	COM_INTERFACE_ENTRY(IInterfaceSettings)
-	COM_INTERFACE_ENTRY(IDispatch)
+   COM_INTERFACE_ENTRY(IInterfaceSettings)
+   COM_INTERFACE_ENTRY(IDispatch)
    COM_INTERFACE_ENTRY(ISupportErrorInfo)
 END_COM_MAP()
 
 
-	DECLARE_PROTECT_FINAL_CONSTRUCT()
+   DECLARE_PROTECT_FINAL_CONSTRUCT()
 
-	HRESULT FinalConstruct()
-	{
-		return S_OK;
-	}
-	
-	void FinalRelease() 
-	{
-	}
+   HRESULT FinalConstruct()
+   {
+      return S_OK;
+   }
+   
+   void FinalRelease() 
+   {
+   }
 
    STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);
 
@@ -223,14 +223,16 @@ END_COM_MAP()
    STDMETHOD(get_TlsVersion13Enabled)(/*[out, retval]*/ VARIANT_BOOL *pVal);
    STDMETHOD(put_TlsVersion13Enabled)(/*[in]*/ VARIANT_BOOL newVal);
 
+   STDMETHOD(get_TlsOptionPreferServerCiphersEnabled)(/*[out, retval]*/ VARIANT_BOOL *pVal);
+   STDMETHOD(put_TlsOptionPreferServerCiphersEnabled)(/*[in]*/ VARIANT_BOOL newVal);
+   STDMETHOD(get_TlsOptionPrioritizeChaChaEnabled)(/*[out, retval]*/ VARIANT_BOOL *pVal);
+   STDMETHOD(put_TlsOptionPrioritizeChaChaEnabled)(/*[in]*/ VARIANT_BOOL newVal);
+
    STDMETHOD(get_CrashSimulationMode)(/*[out, retval]*/ long *pVal);
    STDMETHOD(put_CrashSimulationMode)(/*[in]*/ long newVal);
 
    STDMETHOD(get_IMAPMasterUser)(/*[out, retval]*/ BSTR *pVal);
    STDMETHOD(put_IMAPMasterUser)(/*[in]*/ BSTR newVal);
-
-   STDMETHOD(get_IMAPAuthAllowPlainText)(/*[out, retval]*/ VARIANT_BOOL *pVal);
-   STDMETHOD(put_IMAPAuthAllowPlainText)(/*[in]*/ VARIANT_BOOL newVal);
 
    STDMETHOD(get_IMAPSASLPlainEnabled)(/*[out, retval]*/ VARIANT_BOOL *pVal);
    STDMETHOD(put_IMAPSASLPlainEnabled)(/*[in]*/ VARIANT_BOOL newVal);

@@ -13,8 +13,8 @@ namespace HM
    class IMAPConfiguration  
    {
    public:
-	   IMAPConfiguration();
-	   virtual ~IMAPConfiguration();
+      IMAPConfiguration();
+      virtual ~IMAPConfiguration();
 
       bool Load();
 
@@ -32,9 +32,6 @@ namespace HM
 
       bool GetUseIMAPACL() const;
       void SetUseIMAPACL(bool bValue);
-      
-      bool GetIMAPAuthAllowPlainText() const;
-      void SetIMAPAuthAllowPlainText(bool bValue);
 
       bool GetUseIMAPSASLPlain() const;
       void SetUseIMAPSASLPlain(bool bValue);

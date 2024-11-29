@@ -1,10 +1,10 @@
 // Copyright (c) 2010 Martin Knafve / hMailServer.com.  
 // http://www.hmailserver.com
 
-using System;
+using hMailServer;
 using NUnit.Framework;
 using RegressionTests.Shared;
-using hMailServer;
+using System;
 
 namespace RegressionTests.Infrastructure
 {
@@ -40,7 +40,7 @@ namespace RegressionTests.Infrastructure
          Domain domain = SingletonProvider<TestSetup>.Instance.AddTestDomain();
          Account account = SingletonProvider<TestSetup>.Instance.AddAccount(domain, "test@test.com", "test");
 
-         if ((int) account.Size != 0)
+         if ((int)account.Size != 0)
             throw new Exception("Account is not empty");
       }
 

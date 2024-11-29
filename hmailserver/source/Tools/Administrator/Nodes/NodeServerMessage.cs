@@ -1,22 +1,20 @@
 // Copyright (c) 2010 Martin Knafve / hMailServer.com.  
 // http://www.hmailserver.com
 
-using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Windows.Forms;
 
 namespace hMailServer.Administrator.Nodes
-{ 
+{
    class NodeServerMessage : INode
    {
-       private int _id;
-       private string _name;
+      private int _id;
+      private string _name;
 
       public NodeServerMessage(int id, string name)
       {
-          _id = id;
-          _name = name;
+         _id = id;
+         _name = name;
       }
 
       public System.Drawing.Color ForeColor { get { return System.Drawing.SystemColors.WindowText; } set { } }
@@ -30,11 +28,11 @@ namespace hMailServer.Administrator.Nodes
       {
          get
          {
-             return _name;
+            return _name;
          }
-         set 
+         set
          {
-             _name = value;
+            _name = value;
          }
       }
 

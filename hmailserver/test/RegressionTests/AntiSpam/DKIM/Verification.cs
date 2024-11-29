@@ -1,11 +1,10 @@
 ﻿// Copyright (c) 2010 Martin Knafve / hMailServer.com.  
 // http://www.hmailserver.com
 
-using System;
+using hMailServer;
 using NUnit.Framework;
 using RegressionTests.Infrastructure;
 using RegressionTests.Shared;
-using hMailServer;
 
 namespace RegressionTests.AntiSpam.DKIM
 {
@@ -105,6 +104,39 @@ namespace RegressionTests.AntiSpam.DKIM
          string text = Pop3ClientSimulator.AssertGetFirstMessageText(account1.Address, "test");
 
          Assert.IsTrue(text.Contains("Rejected by DKIM. - (Score: 6)"));
+      }
+
+      //RvdH
+      [Test]
+      [Description("Unable to base64 decode public key found in DNS record.")]
+      public void TestUnableToBase64DecodePublicKey()
+      {
+         _antiSpam.DKIMVerificationEnabled = true;
+         _antiSpam.DKIMVerificationFailureScore = 100;
+
+         string messageText = @"Received: from voicemail.cis.att.net (unknown [12.34.200.188])" + "\r\n" +
+                              "\tby mx2.messiah.edu (Postfix) with ESMTP id 02F12E15D8" + "\r\n" +
+                              "\tfor <test@dkimtest.jason.long.name>; Wed,  3 May 2006 15:06:32 -0400 (EDT)" + "\r\n" +
+                              "Received: from (localhost[127.0.0.1]) by voicemail.cis.att.net (vm2) with SMTP" + "\r\n" +
+                              "\tid <2006050319071918800spa0re>; Wed, 3 May 2006 19:07:19 +0000" + "\r\n" +
+                              "DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dekunstcollegas.nl; s=mailinglijst;" + "\r\n" +
+                              "\th=Date:From:MIME-Version:To:Subject:Content-Type:Content-Transfer-Encoding; bh=HryPFX2R6r7JPsX1Z7+yReZddQR2PjvCvdXgaxW5QYU=;" + "\r\n" +
+                              "\tb=QXd8h2UbBO7fIPz/Iy3wNwbVU6dih6ozokPXqAvI6p9iG5SqFahyTXwqZeltC4az3Sjay7Vx+b5e" + "\r\n" +
+                              "\t1s2rQuhT4SKD47gJYs4kw0JgV2WLanF3oR1hWD0tL0vuDeUgH6kr" + "\r\n" +
+                              "Date: Wed, 15 Feb 2006 17:32:54 -0500" + "\r\n" +
+                              "From: Tony Hansen <tony@att.com>" + "\r\n" +
+                              "MIME-Version: 1.0" + "\r\n" +
+                              "To: dkim-test@altn.org, sa-test@sendmail.net, autorespond+dkim@dk.elandsys.com" + "\r\n" +
+                              "Subject: this is a test message minimum.ietf-01.sha256-relaxed" + "\r\n" +
+                              "Content-Type: text/plain; charset=ISO-8859-1" + "\r\n" +
+                              "Content-Transfer-Encoding: 7bit" + "\r\n" +
+                              "Message-Id: <20060503190632.02F12E15D8@mx2.messiah.edu>" + "\r\n" +
+                              "" + "\r\n" +
+                              "The quick brown fox jumped over the lazy dog." + "\r\n";
+
+
+         Account account1 = SingletonProvider<TestSetup>.Instance.AddAccount(_domain, "test@test.com", "test");
+         CustomAsserts.Throws<DeliveryFailedException>(() => SmtpClientSimulator.StaticSendRaw(account1.Address, account1.Address, messageText));
       }
 
       [Test]

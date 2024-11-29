@@ -1,16 +1,16 @@
 // Copyright (c) 2010 Martin Knafve / hMailServer.com.  
 // http://www.hmailserver.com
 
+using hMailServer;
+using Microsoft.VisualBasic;
+using NUnit.Framework;
+using RegressionTests.Infrastructure;
+using RegressionTests.Shared;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Threading;
-using Microsoft.VisualBasic;
-using NUnit.Framework;
-using RegressionTests.Infrastructure;
-using RegressionTests.Shared;
-using hMailServer;
 
 namespace RegressionTests.API
 {
@@ -63,10 +63,10 @@ namespace RegressionTests.API
             message.set_Flag(eMessageFlag.eMFSeen, true);
             message.Save();
 
-            Pop3ClientSimulator.AssertMessageCount(account.Address, "test", ((i + 1)*2) - 1);
+            Pop3ClientSimulator.AssertMessageCount(account.Address, "test", ((i + 1) * 2) - 1);
 
             SmtpClientSimulator.StaticSend("test@example.com", account.Address, "Test", "Test");
-            Pop3ClientSimulator.AssertMessageCount(account.Address, "test", (i + 1)*2);
+            Pop3ClientSimulator.AssertMessageCount(account.Address, "test", (i + 1) * 2);
          }
 
          Pop3ClientSimulator.AssertMessageCount(account.Address, "test", 6);
@@ -174,7 +174,7 @@ namespace RegressionTests.API
          SmtpClientSimulator.StaticSend("test@example.com", account.Address, "Test", "Test");
 
          // Copy back to inbox.
-         for (int i = 0; i < 3; i ++)
+         for (int i = 0; i < 3; i++)
          {
             hMailServer.Message message = someOtherFolder.Messages[i];
             message.Copy(folder.ID);

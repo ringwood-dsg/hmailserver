@@ -1,10 +1,10 @@
-﻿using System;
-using System.IO;
-using System.Net;
-using hMailServer;
+﻿using hMailServer;
 using NUnit.Framework;
 using RegressionTests.Infrastructure;
 using RegressionTests.Shared;
+using System;
+using System.IO;
+using System.Net;
 
 namespace RegressionTests.SMTP
 {
@@ -41,13 +41,13 @@ namespace RegressionTests.SMTP
          // Delivery from external to local.
          smtpClientSimulator.Send("test@external.com", "test@test.com", "Mail 1", "Mail 1");
          Pop3ClientSimulator.AssertMessageCount("test@test.com", "test", 1);
-         
+
          // Verify that the delivery is logged
          string contents = TestSetup.ReadExistingTextFile(_logging.CurrentAwstatsLog);
          CustomAsserts.AssertDeleteFile(_logging.CurrentAwstatsLog);
          string expectedString = string.Format("\ttest@external.com\ttest@test.com\t{0}\t127.0.0.1\tSMTP\t?\t250\t", localAddress);
          StringAssert.Contains(expectedString, contents);
-         
+
          // Verify there's just 1 logged line
          Assert.AreEqual(1, contents.Split(new string[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries).Length);
       }
@@ -71,7 +71,7 @@ namespace RegressionTests.SMTP
          StringAssert.Contains(expectedString, contents);
 
          // Verify there's just 1 logged line
-         Assert.AreEqual(1,  contents.Split(new string[] {"\r\n"}, StringSplitOptions.RemoveEmptyEntries).Length);
+         Assert.AreEqual(1, contents.Split(new string[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries).Length);
       }
 
       [Test]

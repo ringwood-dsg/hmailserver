@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using hMailServer;
+﻿using hMailServer;
 using NUnit.Framework;
 using RegressionTests.Infrastructure;
 using RegressionTests.Shared;
+using System.Collections.Generic;
 
 namespace RegressionTests.SMTP
 {
@@ -230,7 +228,7 @@ namespace RegressionTests.SMTP
             Route route = TestSetup.AddRoutePointingAtLocalhost(1, smtpServerPort, true, eConnectionSecurity.eCSNone);
             route.TargetSMTPHost = "127.0.0.1";
             route.Save();
-          
+
             var smtpSimulator = new SmtpClientSimulator();
             smtpSimulator.Send("test@test.com",
                                            "test@dummy-example.com", "Mail 1", "Test message");

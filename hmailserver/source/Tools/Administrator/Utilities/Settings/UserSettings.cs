@@ -2,133 +2,131 @@
 // http://www.hmailserver.com
 
 using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Configuration;
 using System.IO;
+using System.Text;
 using System.Xml;
 using System.Xml.Serialization;
 
 namespace hMailServer.Administrator.Utilities.Settings
 {
-    public class UserSettings
-    {
-        private Servers serverConnections;
+   public class UserSettings
+   {
+      private Servers serverConnections;
 
-        private bool autoConnectOnStartup;
-        private string autoConnectServer;
+      private bool autoConnectOnStartup;
+      private string autoConnectServer;
 
-        public UserSettings()
-        {
-            serverConnections = new Servers();
+      public UserSettings()
+      {
+         serverConnections = new Servers();
 
-            autoConnectOnStartup = false;
-        }
+         autoConnectOnStartup = false;
+      }
 
-        public Servers ServerConnections
-        {
-            get { return serverConnections; }
-            set { serverConnections = value; }
-        }
+      public Servers ServerConnections
+      {
+         get { return serverConnections; }
+         set { serverConnections = value; }
+      }
 
-        public bool AutoConnectOnStartup
-        {
-            get { return autoConnectOnStartup; }
-            set { autoConnectOnStartup = value; }
-        }
+      public bool AutoConnectOnStartup
+      {
+         get { return autoConnectOnStartup; }
+         set { autoConnectOnStartup = value; }
+      }
 
-        public string AutoConnectServer
-        {
-            get { return autoConnectServer; }
-            set { autoConnectServer = value; }
-        }
+      public string AutoConnectServer
+      {
+         get { return autoConnectServer; }
+         set { autoConnectServer = value; }
+      }
 
 
-        private static string CreateSettingsFolder()
-        {
-            string localData = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+      private static string CreateSettingsFolder()
+      {
+         string localData = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
 
-            if (!Directory.Exists(localData))
-                Directory.CreateDirectory(localData);
+         if (!Directory.Exists(localData))
+            Directory.CreateDirectory(localData);
 
-            string companyFolder = Path.Combine(localData, "Halvar Information");
-            if (!Directory.Exists(companyFolder))
-                Directory.CreateDirectory(localData);
+         string companyFolder = Path.Combine(localData, "Halvar Information");
+         if (!Directory.Exists(companyFolder))
+            Directory.CreateDirectory(localData);
 
-            string appFolder = Path.Combine(companyFolder, "hMailServer");
-            if (!Directory.Exists(appFolder))
-                Directory.CreateDirectory(appFolder);
+         string appFolder = Path.Combine(companyFolder, "hMailServer");
+         if (!Directory.Exists(appFolder))
+            Directory.CreateDirectory(appFolder);
 
-            return appFolder;
-        }
+         return appFolder;
+      }
 
-        public static void Save(UserSettings settings)
-        {
-            string settingsFile = Path.Combine(CreateSettingsFolder(), "hMailAdmin.exe.config");
+      public static void Save(UserSettings settings)
+      {
+         string settingsFile = Path.Combine(CreateSettingsFolder(), "hMailAdmin.exe.config");
 
-            XmlTextWriter writer = new XmlTextWriter(settingsFile, Encoding.UTF8);
-            
-            try
-            {
-                writer.Formatting = Formatting.Indented;
+         XmlTextWriter writer = new XmlTextWriter(settingsFile, Encoding.UTF8);
 
-                XmlSerializer xmlSerializer = new XmlSerializer(typeof(UserSettings));
-                xmlSerializer.Serialize(writer, settings);
-            }
-            catch (Exception)
-            {
+         try
+         {
+            writer.Formatting = Formatting.Indented;
 
-            }
-            finally
-            {
-                writer.Close();
-            }
-            
-        }
+            XmlSerializer xmlSerializer = new XmlSerializer(typeof(UserSettings));
+            xmlSerializer.Serialize(writer, settings);
+         }
+         catch (Exception)
+         {
 
-        public static UserSettings Load()
-        {
-            string settingsFile = Path.Combine(CreateSettingsFolder(), "hMailAdmin.exe.config");
+         }
+         finally
+         {
+            writer.Close();
+         }
 
-            if (!File.Exists(settingsFile))
-                return CreateDefault();
+      }
 
-            XmlTextReader reader = null;
+      public static UserSettings Load()
+      {
+         string settingsFile = Path.Combine(CreateSettingsFolder(), "hMailAdmin.exe.config");
 
-            try
-            {
-                reader = new XmlTextReader(settingsFile);
-                XmlSerializer xmlSerializer = new XmlSerializer(typeof(UserSettings));
-                UserSettings retVal = (UserSettings)xmlSerializer.Deserialize(reader);
+         if (!File.Exists(settingsFile))
+            return CreateDefault();
 
-                return retVal;
-            }
-            catch (Exception)
-            {
-                return CreateDefault();
-            }
-            finally
-            {
-                if (reader != null)
-                    reader.Close();
-            }
-        }
+         XmlTextReader reader = null;
 
-        private static UserSettings CreateDefault()
-        {
-            UserSettings retVal = new UserSettings();
-
-            Server server = new Server();
-
-            server.hostName = "localhost";
-            server.userName = "Administrator";
-            server.encryptedPassword = "";
-
-            retVal.ServerConnections.List.Add(server);
+         try
+         {
+            reader = new XmlTextReader(settingsFile);
+            XmlSerializer xmlSerializer = new XmlSerializer(typeof(UserSettings));
+            UserSettings retVal = (UserSettings)xmlSerializer.Deserialize(reader);
 
             return retVal;
+         }
+         catch (Exception)
+         {
+            return CreateDefault();
+         }
+         finally
+         {
+            if (reader != null)
+               reader.Close();
+         }
+      }
 
-            
-        }
-    }
+      private static UserSettings CreateDefault()
+      {
+         UserSettings retVal = new UserSettings();
+
+         Server server = new Server();
+
+         server.hostName = "localhost";
+         server.userName = "Administrator";
+         server.encryptedPassword = "";
+
+         retVal.ServerConnections.List.Add(server);
+
+         return retVal;
+
+
+      }
+   }
 }

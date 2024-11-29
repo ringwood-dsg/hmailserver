@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using RegressionTests.Shared;
 
 namespace RegressionTests.Infrastructure
@@ -40,7 +37,7 @@ namespace RegressionTests.Infrastructure
             account.Password = "test";
             account.Active = true;
             account.Save();
-            
+
             Pop3ClientSimulator.AssertMessageCount(account.Address, "test", 0);
          }
 

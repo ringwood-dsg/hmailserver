@@ -21,7 +21,6 @@
 #include "POP3Connection.h"
 #include "POP3Configuration.h"
 #include "../Common/Util/PasswordRemover.h"
-
 #include "../Common/Util/TransparentTransmissionBuffer.h"
 
 #include "../common/Scripting/ClientInfo.h"
@@ -710,7 +709,7 @@ namespace HM
 
       transmission_buffer_.Append((BYTE*) responseString.GetBuffer(), responseString.GetLength());
       
-	  ReadAndSend_();
+      ReadAndSend_();
    }
 
    void 

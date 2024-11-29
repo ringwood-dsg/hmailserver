@@ -1,12 +1,11 @@
 ﻿// Copyright (c) 2010 Martin Knafve / hMailServer.com.  
 // http://www.hmailserver.com
 
-using System;
-using System.Collections.Generic;
+using hMailServer;
 using NUnit.Framework;
 using RegressionTests.Infrastructure;
 using RegressionTests.Shared;
-using hMailServer;
+using System.Collections.Generic;
 
 namespace RegressionTests.AntiSpam
 {
@@ -56,18 +55,18 @@ namespace RegressionTests.AntiSpam
          var recipients = new List<string>();
          recipients.Add(account1.Address);
          smtp.Send("test@test.com", recipients, "Test", "Body");
-         
+
          Pop3ClientSimulator.AssertGetFirstMessageText(account1.Address, "test");
 
          _antiSpam.GreyListingEnabled = true;
 
          CustomAsserts.Throws<DeliveryFailedException>(() => smtp.Send("test@test.com", recipients, "Test", "Body"));
-         
+
 
          _antiSpam.GreyListingEnabled = false;
 
          smtp.Send("test@test.com", recipients, "Test", "Body");
-         
+
          Pop3ClientSimulator.AssertGetFirstMessageText(account1.Address, "test");
       }
 
@@ -104,7 +103,7 @@ namespace RegressionTests.AntiSpam
          var recipients = new List<string>();
          recipients.Add(account1.Address);
          smtp.Send("test@test.com", recipients, "Test", "Body");
-         
+
          Pop3ClientSimulator.AssertGetFirstMessageText(account1.Address, "test");
 
          _antiSpam.GreyListingEnabled = true;

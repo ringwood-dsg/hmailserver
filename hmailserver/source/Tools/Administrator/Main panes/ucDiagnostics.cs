@@ -1,13 +1,13 @@
 ﻿// Copyright (c) 2010 Martin Knafve / hMailServer.com.  
 // http://www.hmailserver.com
 
+using hMailServer.Administrator.Utilities;
+using hMailServer.Shared;
 using System;
 using System.Collections.Generic;
-using System.Windows.Forms;
-using hMailServer.Administrator.Utilities;
-using System.Runtime.InteropServices;
 using System.IO;
-using hMailServer.Shared;
+using System.Runtime.InteropServices;
+using System.Windows.Forms;
 
 namespace hMailServer.Administrator
 {
@@ -59,12 +59,12 @@ namespace hMailServer.Administrator
 
       public void LoadResources()
       {
-         
+
       }
 
       public void OnLeavePage()
       {
-         
+
       }
 
       private void buttonPerformTests_Click(object sender, EventArgs e)
@@ -97,7 +97,7 @@ namespace hMailServer.Administrator
          {
             hMailServer.DiagnosticResult result = results.get_Item(i);
 
-             
+
             int imageIndex = result.Result ? 1 : 0;
 
             _resultString += "Test: " + result.Name + "\r\n";
@@ -105,7 +105,7 @@ namespace hMailServer.Administrator
             TreeNode node = treeResults.Nodes.Add(result.Name, result.Name, imageIndex, imageIndex);
             node.ToolTipText = result.Description;
 
-            string [] subItems = Microsoft.VisualBasic.Strings.Split(result.ExecutionDetails, "\r\n", -1, Microsoft.VisualBasic.CompareMethod.Text);
+            string[] subItems = Microsoft.VisualBasic.Strings.Split(result.ExecutionDetails, "\r\n", -1, Microsoft.VisualBasic.CompareMethod.Text);
 
             foreach (string subItem in subItems)
             {

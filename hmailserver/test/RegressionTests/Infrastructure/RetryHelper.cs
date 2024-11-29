@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading;
 
 namespace RegressionTests.Infrastructure
@@ -20,7 +18,7 @@ namespace RegressionTests.Infrastructure
                action();
                return;
             }
-            catch 
+            catch
             {
                // Will retry.
             }
@@ -30,6 +28,6 @@ namespace RegressionTests.Infrastructure
 
          action();
       }
-      
+
    }
 }

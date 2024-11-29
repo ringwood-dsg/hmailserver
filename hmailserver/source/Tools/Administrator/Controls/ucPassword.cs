@@ -1,13 +1,9 @@
 // Copyright (c) 2010 Martin Knafve / hMailServer.com.  
 // http://www.hmailserver.com
 
-using System;
-using System.ComponentModel;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Text;
-using System.Windows.Forms;
 using hMailServer.Shared;
+using System;
+using System.Windows.Forms;
 
 namespace hMailServer.Administrator.Controls
 {
@@ -83,10 +79,10 @@ namespace hMailServer.Administrator.Controls
          this.PasswordChar = passwordChar;
       }
 
-      protected override void  OnTextChanged(EventArgs e)
- 	   {
+      protected override void OnTextChanged(EventArgs e)
+      {
          _dirty = true;
          base.OnTextChanged(e);
       }
-  }
+   }
 }

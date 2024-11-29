@@ -1,10 +1,10 @@
 ﻿// Copyright (c) 2010 Martin Knafve / hMailServer.com.  
 // http://www.hmailserver.com
 
-using System.Runtime.InteropServices;
+using hMailServer;
 using NUnit.Framework;
 using RegressionTests.Shared;
-using hMailServer;
+using System.Runtime.InteropServices;
 
 namespace RegressionTests.Infrastructure.Persistence
 {
@@ -14,7 +14,7 @@ namespace RegressionTests.Infrastructure.Persistence
       [Test]
       public void TestUnknownOperation()
       {
-         var ex = Assert.Throws<COMException>(() => _application.Utilities.PerformMaintenance((eMaintenanceOperation) 234));
+         var ex = Assert.Throws<COMException>(() => _application.Utilities.PerformMaintenance((eMaintenanceOperation)234));
          StringAssert.Contains("Unknown maintenance operation.", ex.Message);
       }
 

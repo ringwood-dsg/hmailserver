@@ -1,12 +1,12 @@
 // Copyright (c) 2010 Martin Knafve / hMailServer.com.  
 // http://www.hmailserver.com
 
+using hMailServer;
+using NUnit.Framework;
+using RegressionTests.Shared;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using NUnit.Framework;
-using RegressionTests.Shared;
-using hMailServer;
 
 namespace RegressionTests.Infrastructure.Persistence
 {
@@ -202,15 +202,15 @@ namespace RegressionTests.Infrastructure.Persistence
 
          Account account = SingletonProvider<TestSetup>.Instance.AddAccount(domain.Accounts, "test1@example.com",
                                                                             "secret");
-         account.MaxSize = 1024*1024*2000;
+         account.MaxSize = 1024 * 1024 * 2000;
          account.Save();
 
          Account secondAccount = SingletonProvider<TestSetup>.Instance.AddAccount(domain.Accounts,
                                                                                   "test2@example.com", "secret");
-         secondAccount.MaxSize = 1024*1024*2000;
+         secondAccount.MaxSize = 1024 * 1024 * 2000;
          secondAccount.Save();
 
-         Assert.AreEqual(account.MaxSize + (long) secondAccount.MaxSize, domain.AllocatedSize);
+         Assert.AreEqual(account.MaxSize + (long)secondAccount.MaxSize, domain.AllocatedSize);
       }
 
       [Test]

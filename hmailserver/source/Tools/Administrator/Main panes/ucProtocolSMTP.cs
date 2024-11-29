@@ -1,151 +1,151 @@
 // Copyright (c) 2010 Martin Knafve / hMailServer.com.  
 // http://www.hmailserver.com
 
-using System;
-using System.Windows.Forms;
 using hMailServer.Administrator.Utilities;
-using System.Runtime.InteropServices;
 using hMailServer.Shared;
+using System;
+using System.Runtime.InteropServices;
+using System.Windows.Forms;
 
 namespace hMailServer.Administrator
 {
-    public partial class ucProtocolSMTP : UserControl, ISettingsControl
-    {
-        public ucProtocolSMTP()
-        {
-            InitializeComponent();
+   public partial class ucProtocolSMTP : UserControl, ISettingsControl
+   {
+      public ucProtocolSMTP()
+      {
+         InitializeComponent();
 
-            DirtyChecker.SubscribeToChange(this, OnContentChanged);
+         DirtyChecker.SubscribeToChange(this, OnContentChanged);
 
-            new TabOrderManager(this).SetTabOrder(TabOrderManager.TabScheme.AcrossFirst);
+         new TabOrderManager(this).SetTabOrder(TabOrderManager.TabScheme.AcrossFirst);
 
-            comboConnectionSecurity.AddItems(ConnectionSecurityTypes.Get(true));
-        }
+         comboConnectionSecurity.AddItems(ConnectionSecurityTypes.Get(true));
+      }
 
-        public void OnLeavePage()
-        {
+      public void OnLeavePage()
+      {
 
-        }
+      }
 
-        public bool Dirty
-        {
-            get
-            {
-                return DirtyChecker.IsDirty(this);
+      public bool Dirty
+      {
+         get
+         {
+            return DirtyChecker.IsDirty(this);
 
-            }
-        }
+         }
+      }
 
-        private void OnContentChanged()
-        {
-            Instances.MainForm.OnContentChanged();
-        }
+      private void OnContentChanged()
+      {
+         Instances.MainForm.OnContentChanged();
+      }
 
-        private void OnContentChanged(object sender, EventArgs e)
-        {
-            OnContentChanged();
-        }
+      private void OnContentChanged(object sender, EventArgs e)
+      {
+         OnContentChanged();
+      }
 
-        public void LoadData()
-        {
-            hMailServer.Settings settings = APICreator.Application.Settings;
+      public void LoadData()
+      {
+         hMailServer.Settings settings = APICreator.Application.Settings;
 
-            textMaxSMTPConnections.Number = settings.MaxSMTPConnections;
-            textWelcomeMessage.Text = settings.WelcomeSMTP;
-            textMaxMessageSize.Number = settings.MaxMessageSize;
+         textMaxSMTPConnections.Number = settings.MaxSMTPConnections;
+         textWelcomeMessage.Text = settings.WelcomeSMTP;
+         textMaxMessageSize.Number = settings.MaxMessageSize;
 
-            textNoOfRetries.Number = settings.SMTPNoOfTries;
-            textMinutesBetween.Number = settings.SMTPMinutesBetweenTry;
-            chkSmtpDeliveryConnectionSecurity.Checked = settings.SMTPConnectionSecurity ==
-                                                       eConnectionSecurity.eCSSTARTTLSOptional;
+         textNoOfRetries.Number = settings.SMTPNoOfTries;
+         textMinutesBetween.Number = settings.SMTPMinutesBetweenTry;
+         chkSmtpDeliveryConnectionSecurity.Checked = settings.SMTPConnectionSecurity ==
+                                                    eConnectionSecurity.eCSSTARTTLSOptional;
 
-            textHostName.Text = settings.HostName;
-            textSMTPRelayer.Text = settings.SMTPRelayer;
-            textSMTPRelayerPort.Number = settings.SMTPRelayerPort;
-            chkSMTPRelayerRequiresAuth.Checked = settings.SMTPRelayerRequiresAuthentication;
-            textSMTPRelayerUsername.Text = settings.SMTPRelayerUsername;
-            comboConnectionSecurity.SelectedValue = settings.SMTPRelayerConnectionSecurity;
+         textHostName.Text = settings.HostName;
+         textSMTPRelayer.Text = settings.SMTPRelayer;
+         textSMTPRelayerPort.Number = settings.SMTPRelayerPort;
+         chkSMTPRelayerRequiresAuth.Checked = settings.SMTPRelayerRequiresAuthentication;
+         textSMTPRelayerUsername.Text = settings.SMTPRelayerUsername;
+         comboConnectionSecurity.SelectedValue = settings.SMTPRelayerConnectionSecurity;
 
-            checkAllowPlainTextAuthentication.Checked = settings.AllowSMTPAuthPlain;
-            checkAllowMailFromNull.Checked = !settings.DenyMailFromNull;
-            checkAllowIncorrectLineEndings.Checked = settings.AllowIncorrectLineEndings;
-            checkDisconnectInvalidClients.Checked = settings.DisconnectInvalidClients;
-            textMaxNumberOfInvalidCommands.Number = settings.MaxNumberOfInvalidCommands;
+         checkAllowPlainTextAuthentication.Checked = settings.AllowSMTPAuthPlain;
+         checkAllowMailFromNull.Checked = !settings.DenyMailFromNull;
+         checkAllowIncorrectLineEndings.Checked = settings.AllowIncorrectLineEndings;
+         checkDisconnectInvalidClients.Checked = settings.DisconnectInvalidClients;
+         textMaxNumberOfInvalidCommands.Number = settings.MaxNumberOfInvalidCommands;
 
-            textBindToLocalIP.Text = settings.SMTPDeliveryBindToIP;
-            textMaxSMTPRecipientsInBatch.Number = settings.MaxSMTPRecipientsInBatch;
-            checkAddDeliveredToHeader.Checked = settings.AddDeliveredToHeader;
-            textRuleLoopLimit.Number = settings.RuleLoopLimit;
-            textMaxNumberOfMXHosts.Number = settings.MaxNumberOfMXHosts;
+         textBindToLocalIP.Text = settings.SMTPDeliveryBindToIP;
+         textMaxSMTPRecipientsInBatch.Number = settings.MaxSMTPRecipientsInBatch;
+         checkAddDeliveredToHeader.Checked = settings.AddDeliveredToHeader;
+         textRuleLoopLimit.Number = settings.RuleLoopLimit;
+         textMaxNumberOfMXHosts.Number = settings.MaxNumberOfMXHosts;
 
-            EnableDisable();
+         EnableDisable();
 
-            Marshal.ReleaseComObject(settings);
+         Marshal.ReleaseComObject(settings);
 
-        }
+      }
 
-        public bool SaveData()
-        {
-            hMailServer.Settings settings = APICreator.Application.Settings;
+      public bool SaveData()
+      {
+         hMailServer.Settings settings = APICreator.Application.Settings;
 
-            settings.MaxSMTPConnections = textMaxSMTPConnections.Number;
-            settings.WelcomeSMTP = textWelcomeMessage.Text;
-            settings.MaxMessageSize = textMaxMessageSize.Number;
+         settings.MaxSMTPConnections = textMaxSMTPConnections.Number;
+         settings.WelcomeSMTP = textWelcomeMessage.Text;
+         settings.MaxMessageSize = textMaxMessageSize.Number;
 
-            settings.SMTPNoOfTries = textNoOfRetries.Number;
-            settings.SMTPMinutesBetweenTry = textMinutesBetween.Number;
-            settings.SMTPConnectionSecurity =  chkSmtpDeliveryConnectionSecurity.Checked ? eConnectionSecurity.eCSSTARTTLSOptional : eConnectionSecurity.eCSNone;
-           
-            settings.HostName = textHostName.Text;
-            settings.SMTPRelayer = textSMTPRelayer.Text;
-            settings.SMTPRelayerPort = textSMTPRelayerPort.Number;
-            settings.SMTPRelayerRequiresAuthentication = chkSMTPRelayerRequiresAuth.Checked;
-            settings.SMTPRelayerUsername = textSMTPRelayerUsername.Text;
-            settings.SMTPRelayerConnectionSecurity = (eConnectionSecurity)comboConnectionSecurity.SelectedValue;
+         settings.SMTPNoOfTries = textNoOfRetries.Number;
+         settings.SMTPMinutesBetweenTry = textMinutesBetween.Number;
+         settings.SMTPConnectionSecurity = chkSmtpDeliveryConnectionSecurity.Checked ? eConnectionSecurity.eCSSTARTTLSOptional : eConnectionSecurity.eCSNone;
 
-            if (textSMTPRelayerPassword.Dirty)
-                settings.SetSMTPRelayerPassword(textSMTPRelayerPassword.Password);
+         settings.HostName = textHostName.Text;
+         settings.SMTPRelayer = textSMTPRelayer.Text;
+         settings.SMTPRelayerPort = textSMTPRelayerPort.Number;
+         settings.SMTPRelayerRequiresAuthentication = chkSMTPRelayerRequiresAuth.Checked;
+         settings.SMTPRelayerUsername = textSMTPRelayerUsername.Text;
+         settings.SMTPRelayerConnectionSecurity = (eConnectionSecurity)comboConnectionSecurity.SelectedValue;
 
-            settings.AllowSMTPAuthPlain = checkAllowPlainTextAuthentication.Checked;
-            settings.DenyMailFromNull = !checkAllowMailFromNull.Checked;
-            settings.AllowIncorrectLineEndings = checkAllowIncorrectLineEndings.Checked;
-            settings.DisconnectInvalidClients = checkDisconnectInvalidClients.Checked;
-            settings.MaxNumberOfInvalidCommands = textMaxNumberOfInvalidCommands.Number;
+         if (textSMTPRelayerPassword.Dirty)
+            settings.SetSMTPRelayerPassword(textSMTPRelayerPassword.Password);
 
-            settings.SMTPDeliveryBindToIP = textBindToLocalIP.Text;
-            settings.MaxSMTPRecipientsInBatch = textMaxSMTPRecipientsInBatch.Number;
-            settings.AddDeliveredToHeader = checkAddDeliveredToHeader.Checked;
-            settings.RuleLoopLimit = textRuleLoopLimit.Number;
-            settings.MaxNumberOfMXHosts = textMaxNumberOfMXHosts.Number;
+         settings.AllowSMTPAuthPlain = checkAllowPlainTextAuthentication.Checked;
+         settings.DenyMailFromNull = !checkAllowMailFromNull.Checked;
+         settings.AllowIncorrectLineEndings = checkAllowIncorrectLineEndings.Checked;
+         settings.DisconnectInvalidClients = checkDisconnectInvalidClients.Checked;
+         settings.MaxNumberOfInvalidCommands = textMaxNumberOfInvalidCommands.Number;
 
-            DirtyChecker.SetClean(this);
+         settings.SMTPDeliveryBindToIP = textBindToLocalIP.Text;
+         settings.MaxSMTPRecipientsInBatch = textMaxSMTPRecipientsInBatch.Number;
+         settings.AddDeliveredToHeader = checkAddDeliveredToHeader.Checked;
+         settings.RuleLoopLimit = textRuleLoopLimit.Number;
+         settings.MaxNumberOfMXHosts = textMaxNumberOfMXHosts.Number;
 
-            Marshal.ReleaseComObject(settings);
+         DirtyChecker.SetClean(this);
 
-            return true;
-        }
+         Marshal.ReleaseComObject(settings);
 
-        private void EnableDisable()
-        {
-            textSMTPRelayerUsername.Enabled = chkSMTPRelayerRequiresAuth.Checked;
-            textSMTPRelayerPassword.Enabled = chkSMTPRelayerRequiresAuth.Checked;
+         return true;
+      }
 
-            textMaxNumberOfInvalidCommands.Enabled = checkDisconnectInvalidClients.Checked;
-        }
+      private void EnableDisable()
+      {
+         textSMTPRelayerUsername.Enabled = chkSMTPRelayerRequiresAuth.Checked;
+         textSMTPRelayerPassword.Enabled = chkSMTPRelayerRequiresAuth.Checked;
 
-        public void LoadResources()
-        {
-            // load the translated resources
-        }
+         textMaxNumberOfInvalidCommands.Enabled = checkDisconnectInvalidClients.Checked;
+      }
 
-        private void chkSMTPRelayerRequiresAuth_CheckedChanged(object sender, EventArgs e)
-        {
-            EnableDisable();
-        }
+      public void LoadResources()
+      {
+         // load the translated resources
+      }
 
-        private void checkDisconnectInvalidClients_CheckedChanged(object sender, EventArgs e)
-        {
-            EnableDisable();
-        }
-    }
+      private void chkSMTPRelayerRequiresAuth_CheckedChanged(object sender, EventArgs e)
+      {
+         EnableDisable();
+      }
+
+      private void checkDisconnectInvalidClients_CheckedChanged(object sender, EventArgs e)
+      {
+         EnableDisable();
+      }
+   }
 }

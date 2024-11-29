@@ -1,12 +1,12 @@
 // Copyright (c) 2010 Martin Knafve / hMailServer.com.  
 // http://www.hmailserver.com
 
-using System;
-using System.IO;
+using hMailServer;
 using NUnit.Framework;
 using RegressionTests.Infrastructure;
 using RegressionTests.Shared;
-using hMailServer;
+using System;
+using System.IO;
 
 namespace RegressionTests.SMTP
 {
@@ -260,7 +260,7 @@ namespace RegressionTests.SMTP
       }
 
       [Test]
-      public void  TestMimeModificationEmailWithPlaintextAttachment()
+      public void TestMimeModificationEmailWithPlaintextAttachment()
       {
          var message = SendMessageWithSignature("PlainTextSignature", "HtmlSignature",
             TestResources.EmailWith_TextPlainBody_TextHtmlBody_TextPlainAttachment);
@@ -333,7 +333,7 @@ namespace RegressionTests.SMTP
 
          Assert.AreEqual("", message.Body);
          Assert.IsTrue(message.HTMLBody.Contains("<b>HtmlBody</b>\r\n\r\n<br/>\r\nHtmlSignature"), message.HTMLBody);
-         
+
       }
 
       [Test]

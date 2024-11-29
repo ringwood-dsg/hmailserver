@@ -1,14 +1,13 @@
 ﻿// Copyright (c) 2010 Martin Knafve / hMailServer.com.  
 // http://www.hmailserver.com
 
-using System;
-using System.IO;
-using System.Net.Sockets;
-using System.Text;
+using hMailServer;
 using NUnit.Framework;
 using RegressionTests.Infrastructure;
 using RegressionTests.Shared;
-using hMailServer;
+using System.IO;
+using System.Net.Sockets;
+using System.Text;
 
 namespace RegressionTests.Stress
 {
@@ -86,8 +85,8 @@ namespace RegressionTests.Stress
          {
             sb.Append("1234567890");
          }
-                
-         
+
+
          string command = "HELP " + sb;
 
          var socket = new TcpConnection();
@@ -280,7 +279,7 @@ namespace RegressionTests.Stress
       {
          var inner = exception.InnerException as SocketException;
          Assert.IsNotNull(inner);
-     
+
 
          Assert.AreEqual(10054, inner.ErrorCode);
       }

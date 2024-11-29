@@ -1,7 +1,6 @@
-﻿using NUnit.Framework;
-using RegressionTests.Infrastructure;
+﻿using hMailServer;
+using NUnit.Framework;
 using RegressionTests.Shared;
-using hMailServer;
 
 namespace RegressionTests.IMAP
 {

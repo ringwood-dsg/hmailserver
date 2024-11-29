@@ -1,17 +1,15 @@
 // Copyright (c) 2010 Martin Knafve / hMailServer.com.  
 // http://www.hmailserver.com
 
+using hMailServer;
+using NUnit.Framework;
+using RegressionTests.Infrastructure;
+using RegressionTests.Shared;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Runtime.Remoting;
 using System.Text.RegularExpressions;
-using NUnit.Framework;
-using RegressionTests.Infrastructure;
-using RegressionTests.SMTP;
-using RegressionTests.Shared;
-using hMailServer;
 
 namespace RegressionTests.Rules
 {
@@ -411,7 +409,7 @@ namespace RegressionTests.Rules
          var imap = new ImapClientSimulator();
          Assert.IsTrue(imap.ConnectAndLogon("ruletest@test.com", "test"));
 
-         Assert.Throws<ArgumentException>(() =>  imap.GetMessageCount("#public.MyFolder"));
+         Assert.Throws<ArgumentException>(() => imap.GetMessageCount("#public.MyFolder"));
 
          // Set permissions on this folder.
          IMAPFolderPermission permission = folder.Permissions.Add();
@@ -567,7 +565,7 @@ namespace RegressionTests.Rules
          var deliveryResults = new Dictionary<string, int>();
          deliveryResults["test@nonexistantdomain.com"] = 550;
 
-         
+
          using (var server = new SmtpServerSimulator(1, smtpServerPort))
          {
             server.AddRecipientResult(deliveryResults);
@@ -1158,7 +1156,7 @@ namespace RegressionTests.Rules
          AddSpamRule(account1);
 
          // Send email to both recipients
-         var lstRecipients = new List<string> {"ruletest-m1@test.com", "ruletest-m2@test.com"};
+         var lstRecipients = new List<string> { "ruletest-m1@test.com", "ruletest-m2@test.com" };
 
          const string sBody = "Test of sending same email to multiple accounts.";
 
@@ -1284,7 +1282,7 @@ namespace RegressionTests.Rules
          var smtpClientSimulator = new SmtpClientSimulator();
 
          // Test to send the message to account 1. Make sure a copy is created by this rule.
-         smtpClientSimulator.Send(account1.Address, new List<string> {account1.Address, account2.Address}, "Test", "Test message.");
+         smtpClientSimulator.Send(account1.Address, new List<string> { account1.Address, account2.Address }, "Test", "Test message.");
          CustomAsserts.AssertRecipientsInDeliveryQueue(0, true);
          ImapClientSimulator.AssertMessageCount(account1.Address, "test", "Inbox", 2);
          ImapClientSimulator.AssertMessageCount(account2.Address, "test", "Inbox", 2);
@@ -1374,7 +1372,7 @@ namespace RegressionTests.Rules
             var smtpClientSimulator = new SmtpClientSimulator();
 
             // Test to send the message to account 1. Make sure a copy is created by this rule.
-            smtpClientSimulator.Send(account.Address, new List<string> {"ahem@dummy-example.com"}, "Test", "Test message.");
+            smtpClientSimulator.Send(account.Address, new List<string> { "ahem@dummy-example.com" }, "Test", "Test message.");
 
             smtpServer.WaitForCompletion();
          }
@@ -1504,7 +1502,7 @@ namespace RegressionTests.Rules
          Assert.IsTrue(eventLogText.Contains("\"1\""), eventLogText);
 
          // Send message to two recipients. Recipient should still be one, since it's an account-level rule.
-         SmtpClientSimulator.StaticSend(account1.Address, new List<string> {account1.Address, account2.Address},
+         SmtpClientSimulator.StaticSend(account1.Address, new List<string> { account1.Address, account2.Address },
                                         "SomeString", "Detta ska inte hamna i mappen Inbox.Overriden.Test");
 
          CustomAsserts.AssertRecipientsInDeliveryQueue(0);
@@ -1530,13 +1528,13 @@ namespace RegressionTests.Rules
                                         "Detta ska inte hamna i mappen Inbox.Overriden.Test");
          CustomAsserts.AssertRecipientsInDeliveryQueue(0);
          // This should print a single list.
-         
+
          string eventLogText = TestSetup.ReadExistingTextFile(LogHandler.GetEventLogFileName());
          CustomAsserts.AssertDeleteFile(LogHandler.GetEventLogFileName());
          Assert.IsTrue(eventLogText.Contains("\"1\""), eventLogText);
 
          // Send message to two recipients. 
-         SmtpClientSimulator.StaticSend(account1.Address, new List<string> {account1.Address, account2.Address},
+         SmtpClientSimulator.StaticSend(account1.Address, new List<string> { account1.Address, account2.Address },
                                         "SomeString", "Detta ska inte hamna i mappen Inbox.Overriden.Test");
 
          CustomAsserts.AssertRecipientsInDeliveryQueue(0);

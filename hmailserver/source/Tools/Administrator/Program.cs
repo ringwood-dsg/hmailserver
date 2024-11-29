@@ -1,15 +1,12 @@
 // Copyright (c) 2010 Martin Knafve / hMailServer.com.  
 // http://www.hmailserver.com
 
-using System;
-using System.Collections.Generic;
-using System.Windows.Forms;
-using System.Collections;
-using hMailServer.Administrator.Dialogs;
-using System.Threading;
-using System.Runtime.InteropServices;
 using hMailServer.Administrator.Utilities;
 using hMailServer.Shared;
+using System;
+using System.Runtime.InteropServices;
+using System.Threading;
+using System.Windows.Forms;
 
 namespace hMailServer.Administrator
 {
@@ -82,7 +79,7 @@ namespace hMailServer.Administrator
 
       private static void HandleConnectionLost()
       {
-         MessageBox.Show("hMailServer Administrator lost the connection to the hMailServer service.\r\n"+
+         MessageBox.Show("hMailServer Administrator lost the connection to the hMailServer service.\r\n" +
                          "This may happen for example if the hMailServer service stops or restarts.\r\n" +
                          "\r\n" +
                          "If the stop or restart was unexpected, please review the hMailServer logs.\r\n" +

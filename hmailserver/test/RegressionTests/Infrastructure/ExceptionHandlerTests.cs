@@ -1,9 +1,7 @@
-﻿using System;
-using System.IO;
-using System.Runtime.InteropServices;
-using System.ServiceProcess;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using RegressionTests.Shared;
+using System;
+using System.IO;
 
 namespace RegressionTests.Infrastructure
 {
@@ -74,7 +72,7 @@ namespace RegressionTests.Infrastructure
          TriggerCrashSimulationError();
          AssertMinidumpsGeneratedAndErrorsLogged(1, true, "Message: Crash simulation test");
 
-         
+
       }
 
       [Test]
@@ -83,7 +81,7 @@ namespace RegressionTests.Infrastructure
          _settings.CrashSimulationMode = 3;
 
          TriggerCrashSimulationError();
-  
+
          AssertMinidumpsGeneratedAndErrorsLogged(1, true,
             "An error has been detected. A mini dump has been written");
       }
@@ -95,7 +93,7 @@ namespace RegressionTests.Infrastructure
 
          for (int i = 0; i < 20; i++)
          {
-            TriggerCrashSimulationError();   
+            TriggerCrashSimulationError();
          }
 
          AssertMinidumpsGeneratedAndErrorsLogged(0, false);
@@ -144,7 +142,7 @@ namespace RegressionTests.Infrastructure
             TriggerCrashSimulationError();
 
          AssertMinidumpsGeneratedAndErrorsLogged(10, false);
-         
+
          // We should log info that we skipped minidump generation.
          RetryHelper.TryAction(TimeSpan.FromSeconds(5), () =>
          {
@@ -155,7 +153,7 @@ namespace RegressionTests.Infrastructure
          // Pretend one minidump is really old.
          var minidumps = GetMinidumps();
          var testminidump = minidumps[0];
-         File.SetCreationTime(testminidump, new DateTime(2014,01,01));
+         File.SetCreationTime(testminidump, new DateTime(2014, 01, 01));
 
 
          // Now we should be able to create another.

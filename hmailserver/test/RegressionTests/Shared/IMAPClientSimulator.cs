@@ -1,11 +1,11 @@
 // Copyright (c) 2010 Martin Knafve / hMailServer.com.  
 // http://www.hmailserver.com
 
+using NUnit.Framework;
+using RegressionTests.Infrastructure;
 using System;
 using System.Collections.Generic;
 using System.Threading;
-using NUnit.Framework;
-using RegressionTests.Infrastructure;
 
 namespace RegressionTests.Shared
 {
@@ -246,7 +246,7 @@ namespace RegressionTests.Shared
       public bool Close()
       {
          _tcpConnection.Send("A14 CLOSE\r\n");
-         string result = _tcpConnection.ReadUntil(new List<string>() {"A14 BAD", "A14 OK"});
+         string result = _tcpConnection.ReadUntil(new List<string>() { "A14 BAD", "A14 OK" });
 
          if (result.Contains("A14 BAD"))
             return false;
@@ -551,7 +551,6 @@ namespace RegressionTests.Shared
          if (!sData.Contains("A33 OK"))
          {
             throw new ArgumentException("The folder " + sFolder + " was not selectable. Result: " + sData);
-            return 0;
          }
 
          int iStartPos = 2;

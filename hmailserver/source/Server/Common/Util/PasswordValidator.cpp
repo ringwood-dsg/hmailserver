@@ -33,7 +33,7 @@ namespace HM
    std::shared_ptr<const Account>
    PasswordValidator::ValidatePassword(const String &sUsername, const String &sPassword)
    {
-	   return PasswordValidator::ValidatePassword(_T(""), sUsername, sPassword);
+      return PasswordValidator::ValidatePassword(_T(""), sUsername, sPassword);
    }
 
    std::shared_ptr<const Account>
@@ -71,7 +71,7 @@ namespace HM
          return pEmpty;
 
       if (sMasqname.GetLength() == 0)
-	      return pAccount;
+         return pAccount;
 
       // if we get this far, we are authenticating against one username, but will actually login
       // as a second username (rfc-4616)
@@ -86,10 +86,10 @@ namespace HM
       pAccount = CacheContainer::Instance()->GetAccount(sAccountAddress);
 
       if (!pAccount)
-	      return pEmpty;
+         return pEmpty;
 
       if (!pAccount->GetActive())
-	      return pEmpty;
+         return pEmpty;
 
       // Check that the domain is active as well.
 
@@ -97,10 +97,10 @@ namespace HM
       pDomain = CacheContainer::Instance()->GetDomain(sDomain);
 
       if (!pDomain)
-	      return pEmpty;
+         return pEmpty;
 
       if (!pDomain->GetIsActive())
-	      return pEmpty;
+         return pEmpty;
 
       return pAccount;
    }

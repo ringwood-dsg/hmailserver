@@ -1,13 +1,13 @@
 // Copyright (c) 2010 Martin Knafve / hMailServer.com.  
 // http://www.hmailserver.com
 
+using hMailServer.Administrator.Dialogs;
+using hMailServer.Administrator.Utilities;
+using hMailServer.Shared;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows.Forms;
-using hMailServer.Administrator.Dialogs;
-using hMailServer.Administrator.Utilities;
-using hMailServer.Shared;
 
 namespace hMailServer.Administrator
 {
@@ -56,7 +56,7 @@ namespace hMailServer.Administrator
 
       private bool ValidateFolderName()
       {
-         
+
          TreeNode currentNode = treeFolders.SelectedNode;
          var parentNode = currentNode.Parent;
 
@@ -102,7 +102,7 @@ namespace hMailServer.Administrator
             return false;
          }
 
-         
+
 
          return true;
       }
@@ -185,7 +185,7 @@ namespace hMailServer.Administrator
          textName.Text = folder.Name;
 
          EnableDisable();
-         
+
       }
 
       private void btnEditPermissions_Click(object sender, EventArgs e)
@@ -209,7 +209,7 @@ namespace hMailServer.Administrator
             MessageBox.Show(ex.Message, EnumStrings.hMailServerAdministrator, MessageBoxButtons.OK, MessageBoxIcon.Information);
             return;
          }
-         
+
          formFolderPermissions folderPermissions = new formFolderPermissions(folder);
 
          folderPermissions.ShowDialog();
@@ -267,7 +267,7 @@ namespace hMailServer.Administrator
 
       private void contextMenuStrip_Opening(object sender, CancelEventArgs e)
       {
-         
+
          TreeNode selectedNode = treeFolders.SelectedNode;
          if (selectedNode == null)
          {

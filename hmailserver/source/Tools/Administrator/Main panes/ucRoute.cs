@@ -1,222 +1,222 @@
 // Copyright (c) 2010 Martin Knafve / hMailServer.com.  
 // http://www.hmailserver.com
 
-using System;
-using System.Windows.Forms;
-using System.Runtime.InteropServices;
 using hMailServer.Administrator.Utilities;
 using hMailServer.Shared;
+using System;
+using System.Runtime.InteropServices;
+using System.Windows.Forms;
 
 namespace hMailServer.Administrator
 {
-    public partial class ucRoute : UserControl, ISettingsControl
-    {
-        private hMailServer.Route _representedObject;
+   public partial class ucRoute : UserControl, ISettingsControl
+   {
+      private hMailServer.Route _representedObject;
 
-        public ucRoute(int routeID)
-        {
-            InitializeComponent();
+      public ucRoute(int routeID)
+      {
+         InitializeComponent();
 
-            if (routeID > 0)
-            {
-                hMailServer.Routes routes = APICreator.Routes;
-                _representedObject = routes.get_ItemByDBID(routeID);
-                Marshal.ReleaseComObject(routes);
-            }
+         if (routeID > 0)
+         {
+            hMailServer.Routes routes = APICreator.Routes;
+            _representedObject = routes.get_ItemByDBID(routeID);
+            Marshal.ReleaseComObject(routes);
+         }
 
-            DirtyChecker.SubscribeToChange(this, OnContentChanged);
+         DirtyChecker.SubscribeToChange(this, OnContentChanged);
 
-            new TabOrderManager(this).SetTabOrder(TabOrderManager.TabScheme.AcrossFirst);
+         new TabOrderManager(this).SetTabOrder(TabOrderManager.TabScheme.AcrossFirst);
 
-            comboConnectionSecurity.AddItems(ConnectionSecurityTypes.Get(true));
-            comboConnectionSecurity.SelectedIndex = 0;
+         comboConnectionSecurity.AddItems(ConnectionSecurityTypes.Get(true));
+         comboConnectionSecurity.SelectedIndex = 0;
 
-            EnableDisable();
-        }
+         EnableDisable();
+      }
 
-        public void OnLeavePage()
-        {
+      public void OnLeavePage()
+      {
 
-        }
+      }
 
-        private void OnContentChanged()
-        {
-            Instances.MainForm.OnContentChanged();
-        }
+      private void OnContentChanged()
+      {
+         Instances.MainForm.OnContentChanged();
+      }
 
-        private void OnContentChanged(object sender, EventArgs e)
-        {
-            OnContentChanged();
-        }
+      private void OnContentChanged(object sender, EventArgs e)
+      {
+         OnContentChanged();
+      }
 
-        public bool Dirty
-        {
-            get
-            {
-                return DirtyChecker.IsDirty(this) &&
-                       textDomainName.Text.Length > 0 &&
-                       textTargetSMTPHost.Text.Length > 0;
-            }
-        }
+      public bool Dirty
+      {
+         get
+         {
+            return DirtyChecker.IsDirty(this) &&
+                   textDomainName.Text.Length > 0 &&
+                   textTargetSMTPHost.Text.Length > 0;
+         }
+      }
 
-        public void LoadData()
-        {
-            if (_representedObject == null)
-                return;
+      public void LoadData()
+      {
+         if (_representedObject == null)
+            return;
 
-            textDomainName.Text = _representedObject.DomainName;
-            textDescription.Text = _representedObject.Description;
-            textTargetSMTPHost.Text = _representedObject.TargetSMTPHost;
-            textTargetSMTPPort.Number = _representedObject.TargetSMTPPort;
+         textDomainName.Text = _representedObject.DomainName;
+         textDescription.Text = _representedObject.Description;
+         textTargetSMTPHost.Text = _representedObject.TargetSMTPHost;
+         textTargetSMTPPort.Number = _representedObject.TargetSMTPPort;
 
-            comboConnectionSecurity.SelectedValue = _representedObject.ConnectionSecurity;
+         comboConnectionSecurity.SelectedValue = _representedObject.ConnectionSecurity;
 
-            radioTreatSenderAsLocalDomain.Checked = _representedObject.TreatSenderAsLocalDomain;
-            radioTreatSenderAsExternalDomain.Checked = !radioTreatSenderAsLocalDomain.Checked;
+         radioTreatSenderAsLocalDomain.Checked = _representedObject.TreatSenderAsLocalDomain;
+         radioTreatSenderAsExternalDomain.Checked = !radioTreatSenderAsLocalDomain.Checked;
 
-            radioTreatRecipientAsLocalDomain.Checked = _representedObject.TreatRecipientAsLocalDomain;
-            radioTreatRecipientAsExternalDomain.Checked = !radioTreatRecipientAsLocalDomain.Checked;
+         radioTreatRecipientAsLocalDomain.Checked = _representedObject.TreatRecipientAsLocalDomain;
+         radioTreatRecipientAsExternalDomain.Checked = !radioTreatRecipientAsLocalDomain.Checked;
 
-            textNumberOfTries.Number = _representedObject.NumberOfTries;
-            textNumberOfMinutesBetween.Number = _representedObject.MinutesBetweenTry;
+         textNumberOfTries.Number = _representedObject.NumberOfTries;
+         textNumberOfMinutesBetween.Number = _representedObject.MinutesBetweenTry;
 
-            checkServerRequiresAuth.Checked = _representedObject.RelayerRequiresAuth;
-            textUsername.Text = _representedObject.RelayerAuthUsername;
+         checkServerRequiresAuth.Checked = _representedObject.RelayerRequiresAuth;
+         textUsername.Text = _representedObject.RelayerAuthUsername;
 
-            radioRouteForAll.Checked = _representedObject.AllAddresses;
-            radioRouteForAddresses.Checked = !_representedObject.AllAddresses;
+         radioRouteForAll.Checked = _representedObject.AllAddresses;
+         radioRouteForAddresses.Checked = !_representedObject.AllAddresses;
 
-            ListRecipients();
+         ListRecipients();
 
-            EnableDisable();
+         EnableDisable();
 
-        }
+      }
 
-        public bool SaveData()
-        {
-            if (_representedObject == null)
-            {
-                hMailServer.Settings settings = APICreator.Application.Settings;
-                hMailServer.Routes routes = settings.Routes;
-                _representedObject = routes.Add();
+      public bool SaveData()
+      {
+         if (_representedObject == null)
+         {
+            hMailServer.Settings settings = APICreator.Application.Settings;
+            hMailServer.Routes routes = settings.Routes;
+            _representedObject = routes.Add();
 
-                Marshal.ReleaseComObject(settings);
-                Marshal.ReleaseComObject(routes);
+            Marshal.ReleaseComObject(settings);
+            Marshal.ReleaseComObject(routes);
 
-            }
+         }
 
-            _representedObject.DomainName = textDomainName.Text;
-            _representedObject.Description = textDescription.Text;
-            _representedObject.TargetSMTPHost = textTargetSMTPHost.Text;
-            _representedObject.TargetSMTPPort = textTargetSMTPPort.Number;
+         _representedObject.DomainName = textDomainName.Text;
+         _representedObject.Description = textDescription.Text;
+         _representedObject.TargetSMTPHost = textTargetSMTPHost.Text;
+         _representedObject.TargetSMTPPort = textTargetSMTPPort.Number;
 
-            _representedObject.ConnectionSecurity = (eConnectionSecurity) comboConnectionSecurity.SelectedValue;
+         _representedObject.ConnectionSecurity = (eConnectionSecurity)comboConnectionSecurity.SelectedValue;
 
-            _representedObject.TreatSenderAsLocalDomain = radioTreatSenderAsLocalDomain.Checked;
-            _representedObject.TreatRecipientAsLocalDomain = radioTreatRecipientAsLocalDomain.Checked;
+         _representedObject.TreatSenderAsLocalDomain = radioTreatSenderAsLocalDomain.Checked;
+         _representedObject.TreatRecipientAsLocalDomain = radioTreatRecipientAsLocalDomain.Checked;
 
-            _representedObject.NumberOfTries = textNumberOfTries.Number;
-            _representedObject.MinutesBetweenTry = textNumberOfMinutesBetween.Number;
+         _representedObject.NumberOfTries = textNumberOfTries.Number;
+         _representedObject.MinutesBetweenTry = textNumberOfMinutesBetween.Number;
 
-            _representedObject.RelayerRequiresAuth = checkServerRequiresAuth.Checked;
-            _representedObject.RelayerAuthUsername = textUsername.Text;
+         _representedObject.RelayerRequiresAuth = checkServerRequiresAuth.Checked;
+         _representedObject.RelayerAuthUsername = textUsername.Text;
 
-           
-            if (textPassword.Dirty)
-                _representedObject.SetRelayerAuthPassword(textPassword.Password);
 
-            _representedObject.AllAddresses = radioRouteForAll.Checked;
+         if (textPassword.Dirty)
+            _representedObject.SetRelayerAuthPassword(textPassword.Password);
 
-            _representedObject.Save();
+         _representedObject.AllAddresses = radioRouteForAll.Checked;
 
-            // Set the object to clean.
-            DirtyChecker.SetClean(this);
+         _representedObject.Save();
 
-            Utility.RefreshNode(_representedObject.DomainName);
+         // Set the object to clean.
+         DirtyChecker.SetClean(this);
 
-            return true;
-        }
+         Utility.RefreshNode(_representedObject.DomainName);
 
-        public void LoadResources()
-        {
-            // load the translated resources
-        }
+         return true;
+      }
 
-        private void buttonAddRecipient_Click(object sender, EventArgs e)
-        {
-            formInputDialog inputDialog = new formInputDialog();
+      public void LoadResources()
+      {
+         // load the translated resources
+      }
 
-            inputDialog.Title = "Address";
-            inputDialog.Text = "Enter email address";
+      private void buttonAddRecipient_Click(object sender, EventArgs e)
+      {
+         formInputDialog inputDialog = new formInputDialog();
 
-            if (inputDialog.ShowDialog() == DialogResult.OK)
-            {
+         inputDialog.Title = "Address";
+         inputDialog.Text = "Enter email address";
 
-                hMailServer.RouteAddresses routeAddresses = _representedObject.Addresses;
-                hMailServer.RouteAddress routeAddress = routeAddresses.Add();
-
-                routeAddress.Address = inputDialog.Value;
-                routeAddress.Save();
-
-                Marshal.ReleaseComObject(routeAddress);
-                Marshal.ReleaseComObject(routeAddresses);
-            }
-
-            ListRecipients();
-        }
-
-        private void ListRecipients()
-        {
-            listAddresses.Items.Clear();
+         if (inputDialog.ShowDialog() == DialogResult.OK)
+         {
 
             hMailServer.RouteAddresses routeAddresses = _representedObject.Addresses;
+            hMailServer.RouteAddress routeAddress = routeAddresses.Add();
 
-            for (int i = 0; i < routeAddresses.Count; i++)
-            {
-                hMailServer.RouteAddress address = routeAddresses[i];
+            routeAddress.Address = inputDialog.Value;
+            routeAddress.Save();
 
-                ListViewItem item = listAddresses.Items.Add(address.Address);
-                item.Tag = address;
-            }
-        }
+            Marshal.ReleaseComObject(routeAddress);
+            Marshal.ReleaseComObject(routeAddresses);
+         }
 
-        private void buttonDeleteWhiteList_Click(object sender, EventArgs e)
-        {
-            foreach (ListViewItem item in listAddresses.SelectedItems)
-            {
-                hMailServer.RouteAddress address = item.Tag as hMailServer.RouteAddress;
-                address.Delete();
-            }
+         ListRecipients();
+      }
 
-            ListRecipients();
-        }
+      private void ListRecipients()
+      {
+         listAddresses.Items.Clear();
 
-        private void EnableDisable()
-        {
-            listAddresses.Enabled = _representedObject != null && radioRouteForAddresses.Checked;
-            buttonAddRecipient.Enabled = _representedObject != null && radioRouteForAddresses.Checked;
-            buttonDeleteWhiteList.Enabled = _representedObject != null && radioRouteForAddresses.Checked;
+         hMailServer.RouteAddresses routeAddresses = _representedObject.Addresses;
 
-            textUsername.Enabled = checkServerRequiresAuth.Checked;
-            textPassword.Enabled = checkServerRequiresAuth.Checked;
+         for (int i = 0; i < routeAddresses.Count; i++)
+         {
+            hMailServer.RouteAddress address = routeAddresses[i];
 
-        }
+            ListViewItem item = listAddresses.Items.Add(address.Address);
+            item.Tag = address;
+         }
+      }
 
-        private void checkServerRequiresAuth_CheckedChanged(object sender, EventArgs e)
-        {
-            EnableDisable();
-        }
+      private void buttonDeleteWhiteList_Click(object sender, EventArgs e)
+      {
+         foreach (ListViewItem item in listAddresses.SelectedItems)
+         {
+            hMailServer.RouteAddress address = item.Tag as hMailServer.RouteAddress;
+            address.Delete();
+         }
 
-        private void radioRouteForAddresses_CheckedChanged(object sender, EventArgs e)
-        {
-            EnableDisable();
-        }
+         ListRecipients();
+      }
 
-        private void tabPage1_Click(object sender, EventArgs e)
-        {
+      private void EnableDisable()
+      {
+         listAddresses.Enabled = _representedObject != null && radioRouteForAddresses.Checked;
+         buttonAddRecipient.Enabled = _representedObject != null && radioRouteForAddresses.Checked;
+         buttonDeleteWhiteList.Enabled = _representedObject != null && radioRouteForAddresses.Checked;
 
-        }
+         textUsername.Enabled = checkServerRequiresAuth.Checked;
+         textPassword.Enabled = checkServerRequiresAuth.Checked;
+
+      }
+
+      private void checkServerRequiresAuth_CheckedChanged(object sender, EventArgs e)
+      {
+         EnableDisable();
+      }
+
+      private void radioRouteForAddresses_CheckedChanged(object sender, EventArgs e)
+      {
+         EnableDisable();
+      }
+
+      private void tabPage1_Click(object sender, EventArgs e)
+      {
+
+      }
 
 
-    }
+   }
 }

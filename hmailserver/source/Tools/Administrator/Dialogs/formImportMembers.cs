@@ -1,14 +1,13 @@
 // Copyright (c) 2010 Martin Knafve / hMailServer.com.  
 // http://www.hmailserver.com
 
+using hMailServer.Shared;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
-using System.Security.Cryptography.X509Certificates;
-using System.Windows.Forms;
 using System.Runtime.InteropServices;
-using hMailServer.Shared;
+using System.Windows.Forms;
 
 namespace hMailServer.Administrator.Dialogs
 {
@@ -33,7 +32,7 @@ namespace hMailServer.Administrator.Dialogs
          }
 
          HideWaitCursor();
-         
+
          this.Close();
       }
 
@@ -85,7 +84,7 @@ namespace hMailServer.Administrator.Dialogs
          }
 
          _waitCursor = new WaitCursor();
-         
+
          EnableDisable(false);
 
          progressBar1.Minimum = 0;
@@ -93,15 +92,15 @@ namespace hMailServer.Administrator.Dialogs
          progressBar1.Value = 0;
 
          _worker = new BackgroundWorker
-            {
-               WorkerReportsProgress = true,
-               WorkerSupportsCancellation = true
-               
-            };
+         {
+            WorkerReportsProgress = true,
+            WorkerSupportsCancellation = true
+
+         };
          _worker.ProgressChanged += (o, args) => progressBar1.Value = args.ProgressPercentage;
          _worker.DoWork += backgroundWorker_DoWork;
          _worker.RunWorkerCompleted += backgroundWorker_Completed;
-         
+
          var addresses = new List<string>();
          foreach (ListViewItem item in listItems.Items)
          {
@@ -109,10 +108,10 @@ namespace hMailServer.Administrator.Dialogs
          }
 
          var data = new ImportData()
-            {
-               Addresses = addresses,
-               DeleteRecipientsNotInImportFile = ucDeleteRecipientsNotInList.Checked
-            };
+         {
+            Addresses = addresses,
+            DeleteRecipientsNotInImportFile = ucDeleteRecipientsNotInList.Checked
+         };
 
          _worker.RunWorkerAsync(data);
       }
@@ -139,7 +138,7 @@ namespace hMailServer.Administrator.Dialogs
          if (_waitCursor != null)
          {
             _waitCursor.Dispose();
-            _waitCursor = null;            
+            _waitCursor = null;
          }
       }
 
@@ -152,9 +151,9 @@ namespace hMailServer.Administrator.Dialogs
             itemsInInputList.Add(address.ToLowerInvariant(), true);
 
          var itemsToDelete = new List<int>();
-         
+
          var existingItems = new Dictionary<string, bool>();
-         
+
          var recipients = _list.Recipients;
 
          for (int i = 0; i < recipients.Count; i++)
@@ -202,7 +201,7 @@ namespace hMailServer.Administrator.Dialogs
 
             processedCount++;
 
-            int percentageDone = (int) (((double)processedCount / (double)totalCount) * 100);
+            int percentageDone = (int)(((double)processedCount / (double)totalCount) * 100);
             _worker.ReportProgress(percentageDone);
          }
 

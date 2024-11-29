@@ -317,9 +317,9 @@ namespace HM
    bool 
    LocalDelivery::AddTraceHeaders_(std::shared_ptr<const Account> account, std::shared_ptr<Message> pMessage, const String &sOriginalAddress)
    {
-      std::vector<std::pair<AnsiString, AnsiString> > fieldsToWrite;
+      std::vector<std::pair<AnsiString, AnsiString>> fieldsToWrite;
 
-      fieldsToWrite.push_back(std::make_pair("Return-Path", pMessage->GetFromAddress()));
+      fieldsToWrite.push_back(std::make_pair("Return-Path", "<" + pMessage->GetFromAddress() + ">"));
 
       if (Configuration::Instance()->GetSMTPConfiguration()->GetAddDeliveredToHeader())
          fieldsToWrite.push_back(std::make_pair("Delivered-To", sOriginalAddress));

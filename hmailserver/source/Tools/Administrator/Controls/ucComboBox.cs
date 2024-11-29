@@ -1,13 +1,9 @@
 // Copyright (c) 2010 Martin Knafve / hMailServer.com.  
 // http://www.hmailserver.com
 
-using System;
-using System.ComponentModel;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Text;
-using System.Windows.Forms;
 using hMailServer.Shared;
+using System.Collections.Generic;
+using System.Windows.Forms;
 
 namespace hMailServer.Administrator.Controls
 {
@@ -41,7 +37,7 @@ namespace hMailServer.Administrator.Controls
          set
          {
             int index = 0;
-            foreach(object o in _keys)
+            foreach (object o in _keys)
             {
                if (o.Equals(value))
                {
@@ -68,7 +64,7 @@ namespace hMailServer.Administrator.Controls
       public new string Text
       {
          get
-         { 
+         {
             return base.Text;
          }
 

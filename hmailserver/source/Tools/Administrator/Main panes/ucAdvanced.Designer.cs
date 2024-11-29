@@ -76,7 +76,7 @@ namespace hMailServer.Administrator
            // 
            // textAdministratorPassword
            // 
-           this.textAdministratorPassword.Location = new System.Drawing.Point(31, 144);
+           this.textAdministratorPassword.Location = new System.Drawing.Point(32, 144);
            this.textAdministratorPassword.Name = "textAdministratorPassword";
            this.textAdministratorPassword.Number = 0;
            this.textAdministratorPassword.Number64 = ((long)(0));
@@ -132,5 +132,5 @@ namespace hMailServer.Administrator
        private System.Windows.Forms.Label labelAdministrationPassword;
        private System.Windows.Forms.Label labelPleaseRemember;
        private hMailServer.Administrator.Controls.ucCheckbox checkIPv6Preferred;
-    }
+   }
 }

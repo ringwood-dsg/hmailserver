@@ -1,13 +1,12 @@
 // Copyright (c) 2010 Martin Knafve / hMailServer.com.  
 // http://www.hmailserver.com
 
-using System;
-using System.Collections.Generic;
-using System.IO.Ports;
-using System.Text;
-using System.Threading;
 using hMailServer;
 using RegressionTests.SSL;
+using System;
+using System.Collections.Generic;
+using System.Text;
+using System.Threading;
 
 namespace RegressionTests.Shared
 {
@@ -40,7 +39,7 @@ namespace RegressionTests.Shared
       public bool ServerSupportsEhlo { get; set; }
       public bool ServerSupportsHelo { get; set; }
 
-      
+
       public SmtpServerSimulator(int maxNumberOfConnections, int port, eConnectionSecurity connectionSecurity) :
          base(maxNumberOfConnections, port, connectionSecurity)
       {
@@ -52,7 +51,7 @@ namespace RegressionTests.Shared
       public SmtpServerSimulator(int maxNumberOfConnections, int port) :
          this(maxNumberOfConnections, port, eConnectionSecurity.eCSNone)
       {
-         
+
       }
 
       public int RcptTosReceived { get; set; }
@@ -126,11 +125,11 @@ namespace RegressionTests.Shared
             Send("250 Test Server - Helo\r\n");
             return false;
          }
-                 
+
          if (ServerSupportsEhlo && command.ToUpper().StartsWith("EHLO"))
          {
-            var response = new StringBuilder(); 
-            
+            var response = new StringBuilder();
+
             if (_connectionSecurity == eConnectionSecurity.eCSSTARTTLSRequired ||
                 _connectionSecurity == eConnectionSecurity.eCSSTARTTLSOptional)
             {
@@ -200,7 +199,7 @@ namespace RegressionTests.Shared
             string result = _currentRecipientResult[address].ToString();
 
             Send(result + " " + address + "\r\n");
-            
+
             RcptTosReceived++;
 
             return false;
@@ -234,7 +233,7 @@ namespace RegressionTests.Shared
                Disconnect();
                return true;
             }
-            
+
             _messageData += command;
 
             if (_messageData.IndexOf("\r\n.\r\n") > 0)
@@ -256,7 +255,7 @@ namespace RegressionTests.Shared
 
             return false;
          }
-         
+
          if (_expectingUsername)
          {
             _expectingUsername = false;

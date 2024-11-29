@@ -1,12 +1,11 @@
 ﻿// Copyright (c) 2010 Martin Knafve / hMailServer.com.  
 // http://www.hmailserver.com
 
-using System;
-using System.Collections.Generic;
-using System.IO.Ports;
-using System.Text;
 using hMailServer;
 using RegressionTests.SSL;
+using System;
+using System.Collections.Generic;
+using System.Text;
 
 namespace RegressionTests.Shared
 {
@@ -22,11 +21,11 @@ namespace RegressionTests.Shared
          MessageAndTerminatonTogether = 2
       }
 
-      
+
       public Pop3ServerSimulator(int maxNumberOfConnections, int port, List<string> messages) :
          this(maxNumberOfConnections, port, messages, eConnectionSecurity.eCSNone)
       {
-         
+
       }
 
       public Pop3ServerSimulator(int maxNumberOfConnections, int port, List<string> messages, eConnectionSecurity connectionSecurity) :

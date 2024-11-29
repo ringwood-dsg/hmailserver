@@ -1,12 +1,12 @@
 // Copyright (c) 2010 Martin Knafve / hMailServer.com.  
 // http://www.hmailserver.com
 
-using System;
-using System.Windows.Forms;
-using hMailServer.Administrator.Utilities;
 using hMailServer.Administrator.Dialogs;
-using System.Runtime.InteropServices;
+using hMailServer.Administrator.Utilities;
 using hMailServer.Shared;
+using System;
+using System.Runtime.InteropServices;
+using System.Windows.Forms;
 
 namespace hMailServer.Administrator
 {
@@ -28,7 +28,7 @@ namespace hMailServer.Administrator
 
       public bool Dirty
       {
-         get 
+         get
          {
             return DirtyChecker.IsDirty(this);
          }
@@ -82,7 +82,7 @@ namespace hMailServer.Administrator
          settings.IMAPSASLPlainEnabled = checkEnableIMAPPlain.Checked;
          settings.IMAPSASLInitialResponseEnabled = checkEnableIMAPInitialResponse.Checked;
          settings.IMAPMasterUser = textIMAPMasterUser.Text;
-         
+
          bool setClean = true;
          try
          {
@@ -111,7 +111,7 @@ namespace hMailServer.Administrator
       {
          hMailServer.Settings settings = APICreator.Application.Settings;
          hMailServer.IMAPFolders publicFolders = settings.PublicFolders;
-         
+
          formAccountFolders accountFoldersDlg = new formAccountFolders(publicFolders, true);
          accountFoldersDlg.ShowDialog();
 

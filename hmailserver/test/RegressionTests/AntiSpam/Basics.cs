@@ -1,13 +1,12 @@
 // Copyright (c) 2010 Martin Knafve / hMailServer.com.  
 // http://www.hmailserver.com
 
-using System;
-using System.IO;
-using System.Text;
+using hMailServer;
 using NUnit.Framework;
 using RegressionTests.Infrastructure;
 using RegressionTests.Shared;
-using hMailServer;
+using System;
+using System.Text;
 
 namespace RegressionTests.AntiSpam
 {
@@ -152,7 +151,7 @@ namespace RegressionTests.AntiSpam
          var smtpClientSimulator = new SmtpClientSimulator();
 
          var sb = new StringBuilder();
-         int iterations = ((40*1024)/100) + 1;
+         int iterations = ((40 * 1024) / 100) + 1;
          for (int i = 0; i < iterations; i++)
          {
             sb.Append(
@@ -200,16 +199,16 @@ namespace RegressionTests.AntiSpam
          var smtpClientSimulator = new SmtpClientSimulator();
 
          var sb = new StringBuilder();
-         int iterations = ((40*1024)/100) + 1;
+         int iterations = ((40 * 1024) / 100) + 1;
          for (int i = 0; i < iterations; i++)
          {
             sb.Append(
                "1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890\r\n");
          }
 
-            smtpClientSimulator.Send("surbltest@test.com", "surbltest@test.com", "SURBL-No-Match",
-                                  "This is a test message with a SURBL url: -> http://surbl-org-permanent-test-point.com/ <-\r\n" +
-                                  sb);
+         smtpClientSimulator.Send("surbltest@test.com", "surbltest@test.com", "SURBL-No-Match",
+                               "This is a test message with a SURBL url: -> http://surbl-org-permanent-test-point.com/ <-\r\n" +
+                               sb);
 
          string sMessageContents = Pop3ClientSimulator.AssertGetFirstMessageText(account1.Address, "test");
          if (!sMessageContents.Contains("X-hMailServer-Spam") ||
@@ -243,8 +242,9 @@ namespace RegressionTests.AntiSpam
 
          smtpClientSimulator.Send("test@microsoft.com", "missingmxrecords@test.com", "INBOX", "This is a test message.");
 
+         //RvdH
          CustomAsserts.Throws<DeliveryFailedException>(
-            () => smtpClientSimulator.Send("test@domain_without_mx_records421dfsam430sasd.com", account1.Address, "INBOX",
+            () => smtpClientSimulator.Send("test@domain-without-mx-records421dfsam430sasd.com", account1.Address, "INBOX",
                "This is a test message."));
 
          _antiSpam.UseMXChecks = false;
@@ -526,7 +526,7 @@ namespace RegressionTests.AntiSpam
       public void TestSurblAddressEndingWithSingleQuote()
       {
          LogHandler.DeleteCurrentDefaultLog();
-         
+
 
          // Create a test account
          // Fetch the default domain
@@ -633,11 +633,13 @@ namespace RegressionTests.AntiSpam
          surblServer.Active = false;
          surblServer.Save();
 
-
-         Assert.IsTrue(LogHandler.DefaultLogContains("SURBL: 2 unique addresses found."));
+         //RvdH
+         Assert.IsTrue(LogHandler.DefaultLogContains("SURBL: 3 unique addresses found."));
          Assert.IsTrue(LogHandler.DefaultLogContains("SURBL: Found URL: secunia.com"));
-         Assert.IsFalse(LogHandler.DefaultLogContains("SURBL: Found URL: ecunia.com"));
+         Assert.IsTrue(LogHandler.DefaultLogContains("SURBL: Found URL: ca.secunia.com"));
+         Assert.IsFalse(LogHandler.DefaultLogContains("SURBL: Found URL: www.secunia.com"));
          Assert.IsTrue(LogHandler.DefaultLogContains("SURBL: Lookup: secunia.com.multi.surbl.org"));
+         Assert.IsTrue(LogHandler.DefaultLogContains("SURBL: Lookup: ca.secunia.com.multi.surbl.org"));
          Assert.IsTrue(LogHandler.DefaultLogContains("SURBL: Lookup: ubuntu.com.multi.surbl.org"));
       }
    }

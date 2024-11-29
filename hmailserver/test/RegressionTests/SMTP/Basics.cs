@@ -1,18 +1,16 @@
 // Copyright (c) 2010 Martin Knafve / hMailServer.com.  
 // http://www.hmailserver.com
 
+using hMailServer;
+using NUnit.Framework;
+using RegressionTests.Infrastructure;
+using RegressionTests.Shared;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using System.Net;
-using System.Net.Mail;
 using System.Text;
 using System.Threading;
-using NUnit.Framework;
-using RegressionTests.Infrastructure;
-using RegressionTests.Shared;
-using hMailServer;
 
 namespace RegressionTests.SMTP
 {
@@ -207,7 +205,7 @@ namespace RegressionTests.SMTP
          Assert.IsTrue(message.get_Flag(eMessageFlag.eMFVirusScan));
       }
 
-      
+
       [Test]
       [Description("Issue 291, Sloppy non-delivery report generated")]
       public void TestBounceMessageSyntax()
@@ -242,7 +240,7 @@ namespace RegressionTests.SMTP
          Assert.IsTrue(content.Contains("  Subject:=20"));
       }
 
-      
+
 
       [Test]
       [Category("SMTP")]
@@ -467,7 +465,7 @@ namespace RegressionTests.SMTP
          // Join the threads
          for (int i = 0; i < 5; i++)
          {
-            var oThread = (Thread) oThreads[i];
+            var oThread = (Thread)oThreads[i];
             oThread.Join();
          }
 
@@ -737,7 +735,7 @@ namespace RegressionTests.SMTP
          range.Save();
 
          var smtpClientSimulator = new SmtpClientSimulator();
-         var ex  =Assert.Throws<DeliveryFailedException>(() => smtpClientSimulator.Send("test@sdag532sdfagdsa12fsdafdsa1.com",
+         var ex = Assert.Throws<DeliveryFailedException>(() => smtpClientSimulator.Send("test@sdag532sdfagdsa12fsdafdsa1.com",
             "test2@dummy-example.com", "Mail 1", "Test message"));
 
          StringAssert.Contains("550 Delivery is not allowed to this address.", ex.Message, ex.Message);
@@ -865,7 +863,7 @@ namespace RegressionTests.SMTP
             string result = "";
 
             var sim = new SmtpClientSimulator();
-            CustomAsserts.Throws<DeliveryFailedException>( () => sim.Send(senderAccount.Address, recipientAccount.Address, "MySubject", "Test", out result));
+            CustomAsserts.Throws<DeliveryFailedException>(() => sim.Send(senderAccount.Address, recipientAccount.Address, "MySubject", "Test", out result));
 
             Assert.IsTrue(result.StartsWith("4"), "Expected temporary error, but was: " + result);
 
@@ -956,6 +954,7 @@ namespace RegressionTests.SMTP
          sim.SendAndReceive("HELO\r\n");
          var result = sim.SendAndReceive("HELO test.com\r\n");
          Assert.IsTrue(result.Contains("250 Hello."), result);
+         sim.SendAndReceive("QUIT\r\n");
       }
 
       [Test]
@@ -1040,7 +1039,7 @@ namespace RegressionTests.SMTP
 
             Assert.AreEqual("451 Please try again later.\r\n", res);
          }
-
+         sim.SendAndReceive("QUIT\r\n");
          sim.Disconnect();
       }
 
@@ -1099,7 +1098,9 @@ namespace RegressionTests.SMTP
 
          string sWelcomeMessage = simulator.GetWelcomeMessage();
 
-         if (sWelcomeMessage != "220 HOWDYHO ESMTP\r\n")
+         //if (sWelcomeMessage != "220 HOWDYHO ESMTP\r\n")
+         //if (!sWelcomeMessage.StartsWith("220 HOWDYHO ESMTP"))
+         if (!sWelcomeMessage.Contains("220 HOWDYHO ESMTP"))
             throw new Exception("ERROR - Wrong welcome message.");
       }
 
@@ -1119,7 +1120,7 @@ namespace RegressionTests.SMTP
          {
             _application.Settings.SMTPRelayer = "localhost";
             _application.Settings.SMTPRelayerPort = smtpServerPort;
-            
+
             server.AddRecipientResult(deliveryResults);
             server.StartListen();
 

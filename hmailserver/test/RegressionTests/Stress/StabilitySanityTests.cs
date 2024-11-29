@@ -1,14 +1,14 @@
 // Copyright (c) 2010 Martin Knafve / hMailServer.com.  
 // http://www.hmailserver.com
 
+using hMailServer;
+using NUnit.Framework;
+using RegressionTests.Infrastructure;
+using RegressionTests.Shared;
 using System;
 using System.Diagnostics;
 using System.IO;
 using System.Text;
-using NUnit.Framework;
-using RegressionTests.Infrastructure;
-using RegressionTests.Shared;
-using hMailServer;
 
 namespace RegressionTests.Stress
 {
@@ -85,7 +85,7 @@ namespace RegressionTests.Stress
             serverSocket.StartListen();
 
             application.Start();
-            
+
             // make sure it's possible to connect to the non blocked port.
 
             sock.IsPortOpen(110);

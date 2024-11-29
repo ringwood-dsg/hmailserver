@@ -1,12 +1,11 @@
 // Copyright (c) 2010 Martin Knafve / hMailServer.com.  
 // http://www.hmailserver.com
 
-using System;
-using System.Windows.Forms;
-
 using hMailServer.Administrator.Utilities;
 using hMailServer.Administrator.Utilities.Settings;
 using hMailServer.Shared;
+using System;
+using System.Windows.Forms;
 
 namespace hMailServer.Administrator
 {
@@ -33,7 +32,7 @@ namespace hMailServer.Administrator
 
       public string Server
       {
-         get { return _serverName;  }
+         get { return _serverName; }
       }
 
       private void LoadSettings()
@@ -181,9 +180,9 @@ namespace hMailServer.Administrator
          formServerInformation serverDlg = new formServerInformation();
 
          Server server = new Server()
-            {
-               userName = "Administrator"
-            };
+         {
+            userName = "Administrator"
+         };
 
          serverDlg.Server = server;
 

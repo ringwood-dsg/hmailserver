@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using RegressionTests.Shared;
+using System;
 using System.IO;
-using System.Text;
 using System.Threading;
-using NUnit.Framework;
-using RegressionTests.Shared;
 
 namespace RegressionTests.Infrastructure
 {

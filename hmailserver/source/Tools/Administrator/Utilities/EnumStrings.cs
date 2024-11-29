@@ -1,10 +1,6 @@
 // Copyright (c) 2010 Martin Knafve / hMailServer.com.  
 // http://www.hmailserver.com
 
-using System;
-using System.Collections.Generic;
-using System.Text;
-
 namespace hMailServer.Administrator.Utilities
 {
    class EnumStrings
@@ -77,10 +73,10 @@ namespace hMailServer.Administrator.Utilities
                result = "Regular expression";
                break;
             case eRuleMatchType.eMTUnknown:
-               result =  "Unknown";
+               result = "Unknown";
                break;
             case eRuleMatchType.eMTWildcard:
-               result =  "Wildcard";
+               result = "Wildcard";
                break;
             default:
                result = "Unknown";

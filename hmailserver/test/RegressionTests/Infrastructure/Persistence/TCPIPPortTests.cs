@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Runtime.InteropServices;
-using System.Text;
-using hMailServer;
+﻿using hMailServer;
 using NUnit.Framework;
 using RegressionTests.Shared;
+using System.Runtime.InteropServices;
 
 namespace RegressionTests.Infrastructure.Persistence
 {

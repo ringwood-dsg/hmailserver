@@ -1,17 +1,9 @@
 ﻿// Copyright (c) 2010 Martin Knafve / hMailServer.com.  
 // http://www.hmailserver.com
 
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Net.Mail;
-using System.Reflection;
-using System.Text;
 using NUnit.Framework;
-using RegressionTests.Infrastructure;
 using RegressionTests.Shared;
-using hMailServer;
-using Attachment = System.Net.Mail.Attachment;
+using System.Collections.Generic;
 
 namespace RegressionTests.API
 {
@@ -37,7 +29,7 @@ namespace RegressionTests.API
          var thirdId = messages[2].ID;
 
          messages.DeleteByDBID(secondId);
-         
+
          Assert.AreEqual(2, messages.Count);
          Assert.AreEqual(firstId, messages[0].ID);
          Assert.AreEqual(thirdId, messages[1].ID);

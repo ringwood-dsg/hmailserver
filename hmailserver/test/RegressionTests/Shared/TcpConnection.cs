@@ -26,9 +26,9 @@ namespace RegressionTests.Shared
 
       }
 
-      public TcpConnection(bool useSSL) 
+      public TcpConnection(bool useSSL)
          : this(useSSL, SslProtocols.Default)
-         
+
       {
          _useSslSocket = useSSL;
       }
@@ -86,7 +86,7 @@ namespace RegressionTests.Shared
 
          if (_useSslSocket)
             HandshakeAsClient();
-         
+
          return true;
       }
 
@@ -129,7 +129,7 @@ namespace RegressionTests.Shared
                                     ValidateServerCertificate, null);
 
          _sslStream.AuthenticateAsClient("localhost", null, _sslProtocols, false);
-         
+
          _useSslSocket = true;
       }
 

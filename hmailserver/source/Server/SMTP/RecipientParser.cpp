@@ -386,8 +386,8 @@ namespace HM
          String sFormattedRequiredSender = pDA->ApplyAliasesOnAddress(pList->GetRequireAddress());
          if (sFormattedSender.CompareNoCase(sFormattedRequiredSender) != 0)
          {
-	    // Let's adjust reason to better explain sender is not seen as OWNER
-	    // and differentiate from SENDER like list member etc
+            // Let's adjust reason to better explain sender is not seen as OWNER
+            // and differentiate from SENDER like list member etc
             sErrMsg = "Not authorized owner.";
             return DP_PermissionDenied;
          }
