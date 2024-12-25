@@ -835,14 +835,19 @@ namespace HM
       setSpamTestResults.insert(setResult.begin(), setResult.end());
       
       int iTotalSpamScore = SpamProtection::CalculateTotalSpamScore(setSpamTestResults);
+      int iSpamDeleteThreshold = Configuration::Instance()->GetAntiSpamConfiguration().GetSpamDeleteThreshold();
+      int iSpamMarkThreshold = Configuration::Instance()->GetAntiSpamConfiguration().GetSpamMarkThreshold();
 
-      if (iTotalSpamScore >= Configuration::Instance()->GetAntiSpamConfiguration().GetSpamDeleteThreshold())
+      if (iSpamDeleteThreshold > 0 && iTotalSpamScore >= iSpamDeleteThreshold)
       {
+         // Increase the spam-counter
+         ServerStatus::Instance()->OnSpamMessageDetected();
+
          FileUtilities::DeleteFile(fileName);
          return false;
       }
       
-      bool classifiedAsSpam = iTotalSpamScore >= Configuration::Instance()->GetAntiSpamConfiguration().GetSpamMarkThreshold();
+      bool classifiedAsSpam = iSpamMarkThreshold > 0 && iTotalSpamScore >= iSpamMarkThreshold;
       
       if (classifiedAsSpam)
       {
