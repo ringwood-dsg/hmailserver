@@ -848,9 +848,12 @@ namespace HM
       }
       
       bool classifiedAsSpam = iSpamMarkThreshold > 0 && iTotalSpamScore >= iSpamMarkThreshold;
-      
+
       if (classifiedAsSpam)
       {
+         // Set message SPAM Flag
+         current_message_->SetFlagSpam(classifiedAsSpam);
+
          std::shared_ptr<MessageData> messageData = SpamProtection::AddSpamScoreHeaders(current_message_, setSpamTestResults, classifiedAsSpam);
          
          // Increase the spam-counter

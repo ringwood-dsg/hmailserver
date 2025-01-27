@@ -1,7 +1,7 @@
 #pragma once
                                               #define HMAILSERVER_VERSION "5.7.0"
                                               #define HMAILSERVER_VERSION_NUMERIC 5,7,0,2643
-                                              #define HMAILSERVER_BUILD "2643.20"
+                                              #define HMAILSERVER_BUILD "2643.24"
 /*
 [list=1]
 [*]Added: Equalize Return-Path format used within hMailServer, eg : Return-Path : <return-route-addr> (always use angle brackets)
@@ -24,5 +24,9 @@
 [*]Added: Google Feedback Loop header Feedback-ID in DKIM signing [url=https://github.com/hmailserver/hmailserver/pull/492]pull 492[/url]
 [*]Fix: Better log on forward failures, https://github.com/maxsnts/hmailserver/commit/7e285c3a1abe11ad4605aa71bd64176989c473a1
 [*]Fix: Spam scoring/marking/count inconsistencies
+[*]Added: eMessageFlag Spam = 128
+[*]Added: Abort forwarding if original message is marked as Spam
+[*]Added: Abort vacationmessage if original message is marked as Spam
+[*]Added: Abort autoreply/forwarding through rules if original message is marked as Spam
 [/list]
 */

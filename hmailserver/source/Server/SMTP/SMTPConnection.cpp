@@ -1240,6 +1240,9 @@ namespace HM
       
       if (classifiedAsSpam) 
       {
+         // Set message SPAM Flag
+         current_message_->SetFlagSpam(classifiedAsSpam);
+
          pMsgData = SpamProtection::AddSpamScoreHeaders(current_message_, spam_test_results_, classifiedAsSpam);
 
          // Increase the spam-counter

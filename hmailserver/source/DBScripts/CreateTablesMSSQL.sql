@@ -165,7 +165,8 @@ as
 	exec(@cmd)
 return 0
 
-create table hm_accounts (
+create table hm_accounts 
+(
 	accountid int identity (1, 1) not null,
 	accountdomainid int not null,
 	accountadminlevel tinyint not null ,
@@ -190,7 +191,9 @@ create table hm_accounts (
 	accountvacationexpires tinyint not null,
 	accountvacationexpiredate datetime not null,
 	accountpersonfirstname nvarchar(60) not null,
-	accountpersonlastname nvarchar(60) not null
+	accountpersonlastname nvarchar(60) not null,
+	accountvacationabortspamflagged tinyint not null,
+	accountforwardabortspamflagged tinyint not null
 ) 
 
 ALTER TABLE hm_accounts ADD CONSTRAINT hm_accounts_pk PRIMARY KEY NONCLUSTERED (accountid) 
@@ -199,7 +202,8 @@ ALTER TABLE hm_accounts ADD CONSTRAINT u_accountaddress UNIQUE NONCLUSTERED (acc
 
 CREATE CLUSTERED INDEX idx_hm_accounts ON hm_accounts (accountaddress) 
 
-create table hm_aliases (
+create table hm_aliases 
+(
 	aliasid int identity (1, 1) not null,
 	aliasdomainid int not null ,
 	aliasname nvarchar(255) not null,
@@ -213,7 +217,8 @@ ALTER TABLE hm_aliases ADD CONSTRAINT u_aliasname UNIQUE NONCLUSTERED (aliasname
 
 CREATE CLUSTERED INDEX idx_hm_aliases ON hm_aliases (aliasdomainid, aliasname) 
 
-create table hm_domains (
+create table hm_domains 
+(
 	domainid int identity (1, 1) not null,
 	domainname nvarchar(80) not null,
 	domainactive tinyint not null,
@@ -245,7 +250,8 @@ ALTER TABLE hm_domains ADD CONSTRAINT u_domainname UNIQUE NONCLUSTERED (domainna
 
 CREATE CLUSTERED INDEX idx_hm_domains ON hm_domains (domainname)  
 
-create table hm_domain_aliases (
+create table hm_domain_aliases 
+(
 	daid int identity (1, 1) not null,
 	dadomainid integer not null ,
 	daalias nvarchar(255) not null
@@ -253,7 +259,8 @@ create table hm_domain_aliases (
 
 ALTER TABLE hm_domain_aliases ADD CONSTRAINT hm_domain_aliases_pk PRIMARY KEY NONCLUSTERED (daid) 
 
-create table hm_messages (
+create table hm_messages 
+(
 	messageid bigint identity (1, 1) not null,
 	messageaccountid int not null ,
 	messagefolderid int not null ,
@@ -294,7 +301,8 @@ ALTER TABLE hm_message_metadata ADD CONSTRAINT hm_message_metadata_unique UNIQUE
 
 CREATE NONCLUSTERED INDEX idx_message_metadata_id ON hm_message_metadata (metadata_messageid)
 
-create table hm_settings (
+create table hm_settings 
+(
 	settingid int identity (1, 1) not null,
 	settingname nvarchar(30) not null,
 	settingstring nvarchar(4000) not null ,
@@ -305,7 +313,8 @@ ALTER TABLE hm_settings ADD CONSTRAINT hm_settings_pk PRIMARY KEY NONCLUSTERED (
 
 ALTER TABLE hm_settings ADD CONSTRAINT u_settingname UNIQUE NONCLUSTERED (settingname) 
 
-create table hm_dbversion (
+create table hm_dbversion 
+(
 	value int not null
 ) 
 
@@ -511,7 +520,8 @@ create table hm_rule_actions
 	actionscriptfunction nvarchar(255) not null,
 	actionheader nvarchar(80) not null,
 	actionvalue nvarchar(255) not null,
-	actionrouteid int not null
+	actionrouteid int not null,
+	actionabortspamflagged tinyint not null
 ) 
 
 ALTER TABLE hm_rule_actions ADD CONSTRAINT hm_rule_actions_pk PRIMARY KEY NONCLUSTERED (actionid) 
@@ -959,4 +969,4 @@ insert into hm_tcpipports (portprotocol, portnumber, portaddress1, portaddress2,
 
 insert into hm_tcpipports (portprotocol, portnumber, portaddress1, portaddress2, portconnectionsecurity, portsslcertificateid) values (5, 143, 0, NULL, 0, 0) 
 
-insert into hm_dbversion values (5705)
+insert into hm_dbversion values (5708)
