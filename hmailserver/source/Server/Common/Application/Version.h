@@ -1,7 +1,7 @@
 ﻿#pragma once
                                               #define HMAILSERVER_VERSION "5.7.0"
                                               #define HMAILSERVER_VERSION_NUMERIC 5,7,0,2643
-                                              #define HMAILSERVER_BUILD "2643.25"
+                                              #define HMAILSERVER_BUILD "2643.26"
 /*
 [list=1]
 [*]Added: Equalize Return-Path format used within hMailServer, eg : Return-Path : <return-route-addr> (always use angle brackets)
@@ -29,5 +29,6 @@
 [*]Added: Abort vacationmessage if original message is marked as Spam
 [*]Added: Abort autoreply/forwarding through rules if original message is marked as Spam
 [*]Undo: .17
+[*]Fix: IMAP FETCH on message/rfc822 MIME part (roundcube specific when messages are forwarded as attachment)
 [/list]
 */
