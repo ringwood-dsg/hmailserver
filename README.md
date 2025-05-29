@@ -76,7 +76,7 @@ Building Boost
 
    <pre>
    bootstrap
-   b2 debug release threading=multi --build-type=complete --toolset=msvc address-model=64 stage --build-dir=out64 -j 4
+   b2 debug release threading=multi --build-type=complete --toolset=msvc address-model=64 stage --build-dir=out64 -j 4 define=BOOST_USE_WINAPI_VERSION=0x0600
    </pre>
 
 Building hMailServer
