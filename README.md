@@ -51,8 +51,8 @@ Create an environment variable named hMailServerLibs pointing at a folder where 
 
 Building OpenSSL
 ----------------
-1. Download OpenSSL 3.0.15 from [http://www.openssl.org/source/](https://openssl-library.org/source/) and put it into %hMailServerLibs%\<OpenSSL-Version>.
-   You should now have a folder named %hMailServerLibs%\<OpenSSL-version>, for example C:\Dev\hMailLibs\openssl-3.0.15
+1. Download OpenSSL 3.0.16 from [http://www.openssl.org/source/](https://openssl-library.org/source/) and put it into %hMailServerLibs%\<OpenSSL-Version>.
+   You should now have a folder named %hMailServerLibs%\<OpenSSL-version>, for example C:\Dev\hMailLibs\openssl-3.0.16
 2. Start a x64 Native Tools Command Prompt for VS2019.
 3. Change dir to %hMailServerLibs%\<OpenSSL-version>.
 3. Run the following commands:
